@@ -45,7 +45,12 @@ export default function PatientsPage() {
       setError('');
       
       // Ensure user has a profile first
-      await ProfileService.ensureProfile();
+      try {
+        await ProfileService.ensureProfile();
+      } catch (profileError) {
+        console.warn('Profile creation failed, trying to continue:', profileError);
+        // Continue anyway, the backend will handle it
+      }
       
       // Clean the data before sending
       const cleanData = {
