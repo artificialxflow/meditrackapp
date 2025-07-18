@@ -6,14 +6,14 @@ import { useTheme } from '@/providers/ThemeProvider'
 import { FaSun, FaMoon } from 'react-icons/fa'
 
 export default function Navbar() {
-  const { user, signOut } = useAuth()
+  const { user, logout } = useAuth()
   const { theme, toggleTheme } = useTheme()
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
       <div className="container-fluid">
-        <Link href="/" className="navbar-brand">
-          MediTrack
+        <Link href="/" className="navbar-brand fw-bold">
+          دارویار
         </Link>
         <button
           className="navbar-toggler"
@@ -32,47 +32,47 @@ export default function Navbar() {
               <>
                 <li className="nav-item">
                   <Link href="/dashboard" className="nav-link">
-                    Dashboard
+                    داشبورد
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link href="/patients" className="nav-link">
-                    Patients
+                    بیماران
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link href="/families" className="nav-link">
-                    Families
+                    خانواده‌ها
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link href="/medicines" className="nav-link">
-                    Medicines
+                    داروها
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link href="/appointments" className="nav-link">
-                    Appointments
+                    قرار ملاقات
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link href="/vitals" className="nav-link">
-                    Vitals
+                    علائم حیاتی
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link href="/documents" className="nav-link">
-                    Documents
+                    اسناد
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link href="/notifications" className="nav-link">
-                    Notifications
+                    اعلان‌ها
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link href="/profile" className="nav-link">
-                    Profile
+                    پروفایل
                   </Link>
                 </li>
               </>
@@ -86,14 +86,14 @@ export default function Navbar() {
             </li>
             {user ? (
               <li className="nav-item">
-                <button onClick={signOut} className="btn btn-link nav-link">
-                  Sign Out
+                <button onClick={() => logout()} className="btn btn-link nav-link">
+                  خروج
                 </button>
               </li>
             ) : (
               <li className="nav-item">
                 <Link href="/auth/login" className="nav-link">
-                  Sign In
+                  ورود
                 </Link>
               </li>
             )}
