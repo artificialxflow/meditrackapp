@@ -92,30 +92,30 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 flex items-center justify-center p-4">
-      <div className="max-w-md w-full">
+    <div className="min-vh-100 bg-gradient-to-br d-flex align-items-center justify-content-center p-4">
+      <div className="w-100" style={{ maxWidth: '400px' }}>
         {/* Logo and Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-green-500 rounded-2xl mb-4">
-            <FaPills className="text-white text-2xl" />
+        <div className="text-center mb-5">
+          <div className="d-inline-flex align-items-center justify-content-center w-16 h-16 bg-gradient-to-r rounded-3 mb-4">
+            <FaPills className="text-white fs-2" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">خوش آمدید</h1>
-          <p className="text-gray-600">به دارویار وارد شوید</p>
+          <h1 className="display-6 fw-bold text-dark mb-2">خوش آمدید</h1>
+          <p className="text-muted">به دارویار وارد شوید</p>
         </div>
 
         {/* Login Form */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="bg-white rounded-3 shadow-lg p-4">
+          <form onSubmit={handleSubmit}>
             {/* Error Message */}
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl">
+              <div className="alert alert-danger">
                 {error}
               </div>
             )}
 
             {/* Email Field */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="mb-3">
+              <label htmlFor="email" className="form-label">
                 ایمیل
               </label>
               <input
@@ -125,17 +125,17 @@ export default function LoginPage() {
                 value={formData.email}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                className="form-control"
                 placeholder="example@email.com"
               />
             </div>
 
             {/* Password Field */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">
                 رمز عبور
               </label>
-              <div className="relative">
+              <div className="position-relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
                   id="password"
@@ -143,13 +143,14 @@ export default function LoginPage() {
                   value={formData.password}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 pr-12"
+                  className="form-control pe-5"
                   placeholder="رمز عبور خود را وارد کنید"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="btn btn-link position-absolute top-50 start-0 translate-middle-y text-muted"
+                  style={{ zIndex: 10 }}
                 >
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
@@ -157,20 +158,23 @@ export default function LoginPage() {
             </div>
 
             {/* Remember Me and Forgot Password */}
-            <div className="flex items-center justify-between">
-              <label className="flex items-center">
+            <div className="d-flex align-items-center justify-content-between mb-3">
+              <div className="form-check">
                 <input
                   type="checkbox"
                   name="rememberMe"
                   checked={formData.rememberMe}
                   onChange={handleInputChange}
-                  className="w-4 h-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
+                  className="form-check-input"
+                  id="rememberMe"
                 />
-                <span className="mr-2 text-sm text-gray-600">مرا به خاطر بسپار</span>
-              </label>
+                <label className="form-check-label text-muted" htmlFor="rememberMe">
+                  مرا به خاطر بسپار
+                </label>
+              </div>
               <Link
                 href="/forgot-password"
-                className="text-sm text-blue-500 hover:text-blue-600 transition-colors"
+                className="text-decoration-none text-primary"
               >
                 فراموشی رمز عبور؟
               </Link>
@@ -180,11 +184,13 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-500 to-green-500 text-white py-3 px-6 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn btn-primary w-100 py-2 mb-3"
             >
               {loading ? (
-                <div className="flex items-center justify-center">
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin ml-2"></div>
+                <div className="d-flex align-items-center justify-content-center">
+                  <div className="spinner-border spinner-border-sm me-2" role="status">
+                    <span className="visually-hidden">در حال بارگذاری...</span>
+                  </div>
                   در حال ورود...
                 </div>
               ) : (
@@ -194,41 +200,41 @@ export default function LoginPage() {
           </form>
 
           {/* Divider */}
-          <div className="my-6 flex items-center">
-            <div className="flex-1 border-t border-gray-300"></div>
-            <span className="px-4 text-sm text-gray-500">یا</span>
-            <div className="flex-1 border-t border-gray-300"></div>
+          <div className="d-flex align-items-center my-3">
+            <div className="flex-grow-1 border-top"></div>
+            <span className="px-3 text-muted small">یا</span>
+            <div className="flex-grow-1 border-top"></div>
           </div>
 
           {/* Social Login Buttons */}
-          <div className="space-y-3">
+          <div className="d-grid gap-2">
             <button
               type="button"
               onClick={handleGoogleLogin}
               disabled={loading}
-              className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn btn-outline-secondary d-flex align-items-center justify-content-center"
             >
-              <FaGoogle className="text-red-500 ml-3" />
-              <span className="text-gray-700">ورود با گوگل</span>
+              <FaGoogle className="text-danger me-2" />
+              <span>ورود با گوگل</span>
             </button>
             <button
               type="button"
               onClick={handleGithubLogin}
               disabled={loading}
-              className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn btn-outline-secondary d-flex align-items-center justify-content-center"
             >
-              <FaGithub className="text-gray-800 ml-3" />
-              <span className="text-gray-700">ورود با گیت‌هاب</span>
+              <FaGithub className="text-dark me-2" />
+              <span>ورود با گیت‌هاب</span>
             </button>
           </div>
 
           {/* Sign Up Link */}
-          <div className="mt-8 text-center">
-            <p className="text-gray-600">
+          <div className="text-center mt-4">
+            <p className="text-muted">
               حساب کاربری ندارید؟{' '}
               <Link
                 href="/register"
-                className="text-blue-500 hover:text-blue-600 font-semibold transition-colors"
+                className="text-decoration-none fw-semibold"
               >
                 ثبت‌نام کنید
               </Link>
@@ -237,11 +243,11 @@ export default function LoginPage() {
 
           {/* Test Login Button (Development Only) */}
           {process.env.NODE_ENV === 'development' && (
-            <div className="mt-4 text-center">
+            <div className="text-center mt-3">
               <button
                 type="button"
                 onClick={handleTestLogin}
-                className="text-xs text-gray-500 hover:text-gray-700 underline"
+                className="btn btn-link btn-sm text-muted text-decoration-none"
               >
                 پر کردن اطلاعات تست
               </button>
@@ -250,10 +256,10 @@ export default function LoginPage() {
         </div>
 
         {/* Back to Home */}
-        <div className="text-center mt-6">
+        <div className="text-center mt-4">
           <Link
             href="/"
-            className="text-gray-500 hover:text-gray-700 transition-colors text-sm"
+            className="text-decoration-none text-muted"
           >
             ← بازگشت به صفحه اصلی
           </Link>
