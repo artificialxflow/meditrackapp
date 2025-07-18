@@ -16,7 +16,12 @@ export default function AddPatientModal({ show, onHide, onSubmit, initialData }:
 
   useEffect(() => {
     if (initialData) {
-      setFormData(initialData);
+      setFormData({
+        full_name: initialData.full_name || '',
+        date_of_birth: initialData.date_of_birth || '',
+        gender: initialData.gender || 'other',
+        blood_type: initialData.blood_type || 'A+'
+      });
     } else {
       setFormData({ full_name: '', date_of_birth: '', gender: 'other', blood_type: 'A+' });
     }
@@ -29,12 +34,34 @@ export default function AddPatientModal({ show, onHide, onSubmit, initialData }:
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Validate date format before submitting
-    if (formData.date_of_birth && !formData.date_of_birth.match(/^\d{4}-\d{2}-\d{2}$/)) {
-      alert('لطفاً تاریخ را به فرمت صحیح وارد کنید');
+    
+    // Validate required fields
+    if (!formData.full_name.trim()) {
+      alert('لطفاً نام کامل را وارد کنید');
       return;
     }
-    onSubmit(formData);
+    
+    // Validate and format date if provided
+    let submitData = { ...formData };
+    if (formData.date_of_birth && formData.date_of_birth.trim()) {
+      try {
+        const date = new Date(formData.date_of_birth);
+        if (isNaN(date.getTime())) {
+          alert('لطفاً تاریخ را به فرمت صحیح وارد کنید');
+          return;
+        }
+        // Format as YYYY-MM-DD
+        submitData.date_of_birth = date.toISOString().split('T')[0];
+      } catch (error) {
+        alert('لطفاً تاریخ را به فرمت صحیح وارد کنید');
+        return;
+      }
+    } else {
+      // Remove date if empty
+      delete submitData.date_of_birth;
+    }
+    
+    onSubmit(submitData);
   };
 
   if (!show) return null;
@@ -67,7 +94,9 @@ export default function AddPatientModal({ show, onHide, onSubmit, initialData }:
                   value={formData.date_of_birth || ''} 
                   onChange={handleChange}
                   max={new Date().toISOString().split('T')[0]}
+                  placeholder="تاریخ تولد را انتخاب کنید"
                 />
+                <small className="form-text text-muted">اختیاری - برای یادآوری بهتر</small>
               </div>
               <div className="mb-3">
                 <label className="form-label">جنسیت</label>
