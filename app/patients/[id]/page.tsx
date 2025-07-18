@@ -64,11 +64,11 @@ export default function PatientDetailPage({ params }: PatientDetailPageProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-light">
+      <div className="min-vh-100 bg-light">
         <Navbar />
-        <div className="container mx-auto px-4 py-8 text-center">
+        <div className="container py-5 text-center">
           <Loading />
-          <p className="mt-4 text-muted">Loading patient profile...</p>
+          <p className="mt-4 text-muted">در حال بارگذاری پروفایل بیمار...</p>
         </div>
         <Footer />
       </div>
@@ -77,10 +77,10 @@ export default function PatientDetailPage({ params }: PatientDetailPageProps) {
 
   if (!patient) {
     return (
-      <div className="min-h-screen bg-light">
+      <div className="min-vh-100 bg-light">
         <Navbar />
-        <div className="container mx-auto px-4 py-8 text-center">
-          <h3 className="h4 text-muted">Patient not found.</h3>
+        <div className="container py-5 text-center">
+          <h3 className="h4 text-muted">بیمار یافت نشد.</h3>
         </div>
         <Footer />
       </div>
@@ -88,12 +88,12 @@ export default function PatientDetailPage({ params }: PatientDetailPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-light">
+    <div className="min-vh-100 bg-light">
       <Navbar />
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="h2 text-primary mb-4">Patient Profile: {patient.full_name}</h1>
+      <div className="container py-5">
+        <h1 className="h2 text-primary mb-4">پروفایل بیمار: {patient.full_name}</h1>
 
-        {error && <div className="alert alert-danger">{error}</div>}
+        {error && <div className="alert alert-danger">خطا در بارگذاری اطلاعات بیمار.</div>}
 
         <div className="row g-4">
           {/* Patient Details Card */}
@@ -102,9 +102,9 @@ export default function PatientDetailPage({ params }: PatientDetailPageProps) {
               <div className="card-body text-center">
                 <img src={patient.avatar_url || '/default-avatar.png'} alt={patient.full_name} className="rounded-circle mb-3" style={{ width: '120px', height: '120px', objectFit: 'cover' }} />
                 <h5 className="card-title">{patient.full_name}</h5>
-                <p className="card-text text-muted">DOB: {patient.date_of_birth || 'N/A'}</p>
-                <p className="card-text text-muted">Gender: {patient.gender || 'N/A'}</p>
-                <p className="card-text text-muted">Blood Type: {patient.blood_type || 'N/A'}</p>
+                <p className="card-text text-muted">تاریخ تولد: {patient.date_of_birth || 'نامشخص'}</p>
+                <p className="card-text text-muted">جنسیت: {patient.gender || 'نامشخص'}</p>
+                <p className="card-text text-muted">گروه خونی: {patient.blood_type || 'نامشخص'}</p>
               </div>
             </div>
           </div>
@@ -113,8 +113,8 @@ export default function PatientDetailPage({ params }: PatientDetailPageProps) {
           <div className="col-lg-4">
             <div className="card h-100">
               <div className="card-body">
-                <h5 className="card-title"><FaPills className="me-2" /> Medications</h5>
-                <p className="card-text">Total: {medicines.length}</p>
+                <h5 className="card-title"><FaPills className="me-2" /> داروها</h5>
+                <p className="card-text">تعداد: {medicines.length}</p>
                 {/* Add a list of recent medications or a link to the full medications page */}
               </div>
             </div>
@@ -124,8 +124,8 @@ export default function PatientDetailPage({ params }: PatientDetailPageProps) {
           <div className="col-lg-4">
             <div className="card h-100">
               <div className="card-body">
-                <h5 className="card-title"><FaCalendarCheck className="me-2" /> Appointments</h5>
-                <p className="card-text">Total: {appointments.length}</p>
+                <h5 className="card-title"><FaCalendarCheck className="me-2" /> قرار ملاقات</h5>
+                <p className="card-text">تعداد: {appointments.length}</p>
                 {/* Add a list of upcoming appointments or a link to the full appointments page */}
               </div>
             </div>
@@ -135,8 +135,8 @@ export default function PatientDetailPage({ params }: PatientDetailPageProps) {
           <div className="col-lg-4">
             <div className="card h-100">
               <div className="card-body">
-                <h5 className="card-title"><FaHeartbeat className="me-2" /> Vitals</h5>
-                <p className="card-text">Total: {vitals.length}</p>
+                <h5 className="card-title"><FaHeartbeat className="me-2" /> علائم حیاتی</h5>
+                <p className="card-text">تعداد: {vitals.length}</p>
                 {/* Add a list of recent vital readings or a link to the full vitals page */}
               </div>
             </div>
@@ -146,8 +146,8 @@ export default function PatientDetailPage({ params }: PatientDetailPageProps) {
           <div className="col-lg-4">
             <div className="card h-100">
               <div className="card-body">
-                <h5 className="card-title"><FaFileAlt className="me-2" /> Documents</h5>
-                <p className="card-text">Total: {documents.length}</p>
+                <h5 className="card-title"><FaFileAlt className="me-2" /> اسناد</h5>
+                <p className="card-text">تعداد: {documents.length}</p>
                 {/* Add a list of recent documents or a link to the full documents page */}
               </div>
             </div>
