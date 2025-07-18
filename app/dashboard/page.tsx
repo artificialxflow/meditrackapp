@@ -63,7 +63,7 @@ export default function DashboardPage() {
         <Navbar />
         <div className="container mx-auto px-4 py-8 text-center">
           <Loading />
-          <p className="mt-4 text-muted">Loading dashboard...</p>
+          <p className="mt-4 text-muted">در حال بارگذاری داشبورد...</p>
         </div>
         <Footer />
       </div>
@@ -74,36 +74,36 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-light">
       <Navbar />
       <div className="container mx-auto px-4 py-8">
-        <h1 className="h2 text-primary mb-4">Dashboard</h1>
+        <h1 className="h2 text-primary mb-4">داشبورد</h1>
 
-        {error && <div className="alert alert-danger">{error}</div>}
+        {error && <div className="alert alert-danger">خطا در بارگذاری اطلاعات داشبورد.</div>}
 
         <div className="row g-4">
           <div className="col-md-6 col-lg-3">
             <div className="card text-center p-3">
               <FaUser className="text-primary mb-2" style={{ fontSize: '2rem' }} />
-              <h5 className="card-title">Patients</h5>
+              <h5 className="card-title">بیماران</h5>
               <p className="card-text display-4">{patients.length}</p>
             </div>
           </div>
           <div className="col-md-6 col-lg-3">
             <div className="card text-center p-3">
               <FaPills className="text-success mb-2" style={{ fontSize: '2rem' }} />
-              <h5 className="card-title">Medicines</h5>
+              <h5 className="card-title">داروها</h5>
               <p className="card-text display-4">{medicines.length}</p>
             </div>
           </div>
           <div className="col-md-6 col-lg-3">
             <div className="card text-center p-3">
               <FaCalendarCheck className="text-info mb-2" style={{ fontSize: '2rem' }} />
-              <h5 className="card-title">Appointments</h5>
+              <h5 className="card-title">قرار ملاقات</h5>
               <p className="card-text display-4">{appointments.length}</p>
             </div>
           </div>
           <div className="col-md-6 col-lg-3">
             <div className="card text-center p-3">
               <FaHeartbeat className="text-danger mb-2" style={{ fontSize: '2rem' }} />
-              <h5 className="card-title">Vitals</h5>
+              <h5 className="card-title">علائم حیاتی</h5>
               <p className="card-text display-4">{vitals.length}</p>
             </div>
           </div>
