@@ -1,41 +1,49 @@
 import Link from 'next/link'
-import { FaPills, FaGithub, FaTwitter, FaLinkedin, FaEnvelope } from 'react-icons/fa'
+import { FaPills, FaGithub, FaTwitter, FaLinkedin, FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa'
 
 export default function Footer() {
   return (
-    <footer className="bg-dark text-white py-5">
-      <div className="container">
+    <footer className="bg-dark text-white mt-auto">
+      <div className="container py-5">
         <div className="row g-4">
           {/* Company Info */}
           <div className="col-lg-4 col-md-6">
             <div className="d-flex align-items-center mb-3">
-              <div className="w-8 h-8 bg-gradient-to-r rounded d-flex align-items-center justify-content-center me-2">
-                <FaPills className="text-white small" />
+              <div className="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style={{ width: '40px', height: '40px' }}>
+                <FaPills className="text-white" />
               </div>
-              <span className="fs-5 fw-bold">دارویار</span>
+              <span className="fs-4 fw-bold">دارویار</span>
             </div>
-            <p className="text-muted mb-3">
+            <p className="text-muted mb-4">
               مدیریت هوشمند داروها برای زندگی بهتر. اپلیکیشن دارویار به شما کمک می‌کند تا مصرف داروها را به‌صورت دقیق و منظم مدیریت کنید.
             </p>
-            <div className="d-flex gap-3">
-              <a href="#" className="text-muted hover-text-white text-decoration-none">
+            <div className="d-flex gap-3 mb-3">
+              <a href="#" className="text-muted text-decoration-none hover-text-white" title="GitHub">
                 <FaGithub className="fs-5" />
               </a>
-              <a href="#" className="text-muted hover-text-white text-decoration-none">
+              <a href="#" className="text-muted text-decoration-none hover-text-white" title="Twitter">
                 <FaTwitter className="fs-5" />
               </a>
-              <a href="#" className="text-muted hover-text-white text-decoration-none">
+              <a href="#" className="text-muted text-decoration-none hover-text-white" title="LinkedIn">
                 <FaLinkedin className="fs-5" />
               </a>
-              <a href="mailto:info@daruyar.com" className="text-muted hover-text-white text-decoration-none">
+              <a href="mailto:info@daruyar.com" className="text-muted text-decoration-none hover-text-white" title="ایمیل">
                 <FaEnvelope className="fs-5" />
               </a>
+            </div>
+            <div className="d-flex align-items-center text-muted small mb-2">
+              <FaPhone className="me-2" />
+              <span>۰۲۱-۱۲۳۴۵۶۷۸</span>
+            </div>
+            <div className="d-flex align-items-center text-muted small">
+              <FaMapMarkerAlt className="me-2" />
+              <span>تهران، ایران</span>
             </div>
           </div>
 
           {/* Product Links */}
           <div className="col-lg-2 col-md-6">
-            <h5 className="fs-6 fw-semibold mb-3">محصول</h5>
+            <h6 className="fw-semibold mb-3 text-white">محصول</h6>
             <ul className="list-unstyled">
               <li className="mb-2">
                 <Link href="#features" className="text-muted text-decoration-none hover-text-white">
@@ -62,7 +70,7 @@ export default function Footer() {
 
           {/* Support Links */}
           <div className="col-lg-2 col-md-6">
-            <h5 className="fs-6 fw-semibold mb-3">پشتیبانی</h5>
+            <h6 className="fw-semibold mb-3 text-white">پشتیبانی</h6>
             <ul className="list-unstyled">
               <li className="mb-2">
                 <Link href="/help" className="text-muted text-decoration-none hover-text-white">
@@ -89,7 +97,7 @@ export default function Footer() {
 
           {/* Company Links */}
           <div className="col-lg-2 col-md-6">
-            <h5 className="fs-6 fw-semibold mb-3">شرکت</h5>
+            <h6 className="fw-semibold mb-3 text-white">شرکت</h6>
             <ul className="list-unstyled">
               <li className="mb-2">
                 <Link href="/about" className="text-muted text-decoration-none hover-text-white">
@@ -116,7 +124,7 @@ export default function Footer() {
 
           {/* Legal Links */}
           <div className="col-lg-2 col-md-6">
-            <h5 className="fs-6 fw-semibold mb-3">قوانین</h5>
+            <h6 className="fw-semibold mb-3 text-white">قوانین</h6>
             <ul className="list-unstyled">
               <li className="mb-2">
                 <Link href="/privacy" className="text-muted text-decoration-none hover-text-white">
@@ -147,7 +155,7 @@ export default function Footer() {
           <div className="row align-items-center">
             <div className="col-md-6">
               <p className="text-muted mb-0">
-                &copy; 2024 دارویار. تمامی حقوق محفوظ است.
+                &copy; ۱۴۰۳ دارویار. تمامی حقوق محفوظ است.
               </p>
             </div>
             <div className="col-md-6 text-md-end">
