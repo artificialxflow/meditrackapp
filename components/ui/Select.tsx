@@ -29,7 +29,7 @@ export default function Select({
   variant = 'default',
   className = '',
   id,
-  options,
+  options = [],
   placeholder,
   ...props
 }: SelectProps) {
