@@ -25,27 +25,38 @@ export default function SharePatientModal({ show, onHide, onSubmit }: SharePatie
     <div className="modal fade show d-block" tabIndex={-1} style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Share Patient Profile</h5>
-            <button type="button" className="btn-close" onClick={onHide}></button>
+          <div className="modal-header bg-primary text-white">
+            <h5 className="modal-title">اشتراک‌گذاری پروفایل بیمار</h5>
+            <button type="button" className="btn-close btn-close-white" onClick={onHide}></button>
           </div>
           <div className="modal-body">
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label className="form-label">Share with Email</label>
-                <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <label className="form-label">ایمیل کاربر</label>
+                <Input 
+                  type="email" 
+                  value={email} 
+                  onChange={(e) => setEmail(e.target.value)} 
+                  required 
+                  placeholder="ایمیل کاربر را وارد کنید"
+                />
               </div>
               <div className="mb-3">
-                <label className="form-label">Permission Level</label>
-                <Select value={permission} onChange={(e) => setPermission(e.target.value as 'view_only' | 'edit_access' | 'full_access')}>
-                  <option value="view_only">View Only</option>
-                  <option value="edit_access">Edit Access</option>
-                  <option value="full_access">Full Access</option>
-                </Select>
+                <label className="form-label">سطح دسترسی</label>
+                <Select 
+                  value={permission} 
+                  onChange={(e) => setPermission(e.target.value as 'view_only' | 'edit_access' | 'full_access')}
+                  options={[
+                    { value: 'view_only', label: 'فقط مشاهده' },
+                    { value: 'edit_access', label: 'دسترسی ویرایش' },
+                    { value: 'full_access', label: 'دسترسی کامل' }
+                  ]}
+                  placeholder="سطح دسترسی را انتخاب کنید"
+                />
               </div>
               <div className="d-flex justify-content-end">
-                <Button type="button" className="btn-secondary me-2" onClick={onHide}>Cancel</Button>
-                <Button type="submit" className="btn-primary">Share Patient</Button>
+                <Button type="button" className="btn-secondary me-2" onClick={onHide}>انصراف</Button>
+                <Button type="submit" className="btn-primary">اشتراک‌گذاری</Button>
               </div>
             </form>
           </div>
