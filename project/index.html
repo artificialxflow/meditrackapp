@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دارویار - مدیریت دارو</title>
+    
+    <!-- Bootstrap RTL -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Vazir Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazir:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-2">
+                    <button class="btn btn-link text-white" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                <div class="col-8 text-center">
+                    <h1 class="app-title">
+                        <i class="fas fa-pills"></i>
+                        دارویار
+                    </h1>
+                </div>
+                <div class="col-2 text-end">
+                    <div class="dropdown">
+                        <button class="btn btn-link text-white" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> پروفایل</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i> تنظیمات</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i> خروج</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="fas fa-heartbeat"></i> منوی اصلی</h3>
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" href="#dashboard">
+                    <i class="fas fa-tachometer-alt"></i> داشبورد
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#medicines">
+                    <i class="fas fa-pills"></i> داروها
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#reminders">
+                    <i class="fas fa-bell"></i> یادآوری‌ها
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#history">
+                    <i class="fas fa-history"></i> تاریخچه
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#inventory">
+                    <i class="fas fa-box"></i> موجودی
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#reports">
+                    <i class="fas fa-chart-line"></i> گزارش‌ها
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#profile">
+                    <i class="fas fa-user"></i> پروفایل
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container-fluid">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="content-section">
+                <!-- Welcome Message -->
+                <div class="welcome-section">
+                    <h2>سلام، علی جان!</h2>
+                    <p>امروز <span id="currentDate"></span> است و شما <span class="highlight">۳ دارو</span> برای مصرف دارید.</p>
+                </div>
+
+                <!-- Summary Cards -->
+                <div class="row mb-4">
+                    <div class="col-6 col-md-3">
+                        <div class="card summary-card card-primary">
+                            <div class="card-body text-center">
+                                <i class="fas fa-pills fa-2x"></i>
+                                <h3>۱۲</h3>
+                                <p>داروی فعال</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="card summary-card card-success">
+                            <div class="card-body text-center">
+                                <i class="fas fa-bell fa-2x"></i>
+                                <h3>۳</h3>
+                                <p>یادآوری امروز</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="card summary-card card-warning">
+                            <div class="card-body text-center">
+                                <i class="fas fa-exclamation-triangle fa-2x"></i>
+                                <h3>۲</h3>
+                                <p>کمبود دارو</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="card summary-card card-info">
+                            <div class="card-body text-center">
+                                <i class="fas fa-calendar-check fa-2x"></i>
+                                <h3>۸۵٪</h3>
+                                <p>نرخ مصرف</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Today's Medications -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-calendar-day"></i> داروهای امروز
+                        </h5>
+                        <span class="badge bg-primary">۳ دارو</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="medication-item">
+                            <div class="medication-info">
+                                <div class="medication-image">
+                                    <img src="https://images.pexels.com/photos/3683074/pexels-photo-3683074.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop" alt="دارو">
+                                </div>
+                                <div class="medication-details">
+                                    <h6>آسپرین ۱۰۰ میلی‌گرم</h6>
+                                    <p class="text-muted">۱ قرص - ۸:۰۰ صبح</p>
+                                    <span class="badge bg-success">مصرف شد</span>
+                                </div>
+                            </div>
+                            <div class="medication-actions">
+                                <button class="btn btn-sm btn-outline-success">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning">
+                                    <i class="fas fa-clock"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="medication-item">
+                            <div class="medication-info">
+                                <div class="medication-image">
+                                    <img src="https://images.pexels.com/photos/3683074/pexels-photo-3683074.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop" alt="دارو">
+                                </div>
+                                <div class="medication-details">
+                                    <h6>ویتامین D۳</h6>
+                                    <p class="text-muted">۱ کپسول - ۱۲:۰۰ ظهر</p>
+                                    <span class="badge bg-warning">نزدیک است</span>
+                                </div>
+                            </div>
+                            <div class="medication-actions">
+                                <button class="btn btn-sm btn-outline-success">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning">
+                                    <i class="fas fa-clock"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="medication-item">
+                            <div class="medication-info">
+                                <div class="medication-image">
+                                    <img src="https://images.pexels.com/photos/3683074/pexels-photo-3683074.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop" alt="دارو">
+                                </div>
+                                <div class="medication-details">
+                                    <h6>اومگا ۳</h6>
+                                    <p class="text-muted">۲ کپسول - ۸:۰۰ شب</p>
+                                    <span class="badge bg-secondary">در انتظار</span>
+                                </div>
+                            </div>
+                            <div class="medication-actions">
+                                <button class="btn btn-sm btn-outline-success">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning">
+                                    <i class="fas fa-clock"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart Section -->
+                <div class="row mb-4">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-chart-line"></i> نمودار مصرف هفتگی
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="weeklyChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-exclamation-triangle"></i> هشدارها
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert alert-warning">
+                                    <i class="fas fa-pills"></i>
+                                    <strong>کمبود دارو:</strong> آسپرین تا ۳ روز دیگر تمام می‌شود.
+                                </div>
+                                <div class="alert alert-danger">
+                                    <i class="fas fa-calendar-times"></i>
+                                    <strong>تاریخ انقضا:</strong> ویتامین C تا ۱۰ روز دیگر منقضی می‌شود.
+                                </div>
+                                <div class="alert alert-info">
+                                    <i class="fas fa-clock"></i>
+                                    <strong>یادآوری:</strong> معاینه پزشک تا ۵ روز دیگر.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-bolt"></i> عملیات سریع
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6 col-md-3">
+                                <button class="btn btn-primary btn-block quick-action-btn" data-bs-toggle="modal" data-bs-target="#addMedicineModal">
+                                    <i class="fas fa-plus"></i>
+                                    <span>افزودن دارو</span>
+                                </button>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <button class="btn btn-success btn-block quick-action-btn">
+                                    <i class="fas fa-bell"></i>
+                                    <span>یادآوری جدید</span>
+                                </button>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <button class="btn btn-info btn-block quick-action-btn">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span>مشاهده گزارش</span>
+                                </button>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <button class="btn btn-warning btn-block quick-action-btn">
+                                    <i class="fas fa-box"></i>
+                                    <span>موجودی</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Medicine Modal -->
+    <div class="modal fade" id="addMedicineModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">افزودن داروی جدید</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="medicineName" class="form-label">نام دارو</label>
+                            <input type="text" class="form-control" id="medicineName" placeholder="نام دارو را وارد کنید">
+                        </div>
+                        <div class="mb-3">
+                            <label for="dosage" class="form-label">دوز</label>
+                            <input type="text" class="form-control" id="dosage" placeholder="مثال: ۱ قرص">
+                        </div>
+                        <div class="mb-3">
+                            <label for="frequency" class="form-label">تعداد دفعات در روز</label>
+                            <select class="form-select" id="frequency">
+                                <option value="1">۱ بار در روز</option>
+                                <option value="2">۲ بار در روز</option>
+                                <option value="3">۳ بار در روز</option>
+                                <option value="4">۴ بار در روز</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="time" class="form-label">ساعت مصرف</label>
+                            <input type="time" class="form-control" id="time">
+                        </div>
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">توضیحات</label>
+                            <textarea class="form-control" id="notes" rows="3" placeholder="توضیحات اضافی (اختیاری)"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
+                    <button type="button" class="btn btn-primary">ذخیره</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p>&copy; ۲۰۲۴ دارویار - سلامت شما اولویت ماست</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
