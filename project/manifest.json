@@ -1,0 +1,32 @@
+{
+    "name": "دارویار - مدیریت دارو",
+    "short_name": "دارویار",
+    "description": "اپلیکیشن مدیریت دارو و یادآوری مصرف",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#4A90E2",
+    "theme_color": "#4A90E2",
+    "orientation": "portrait-primary",
+    "lang": "fa",
+    "dir": "rtl",
+    "icons": [
+        {
+            "src": "https://images.pexels.com/photos/3683074/pexels-photo-3683074.jpeg?auto=compress&cs=tinysrgb&w=192&h=192&fit=crop",
+            "sizes": "192x192",
+            "type": "image/jpeg"
+        },
+        {
+            "src": "https://images.pexels.com/photos/3683074/pexels-photo-3683074.jpeg?auto=compress&cs=tinysrgb&w=512&h=512&fit=crop",
+            "sizes": "512x512",
+            "type": "image/jpeg"
+        }
+    ],
+    "categories": ["health", "medical", "productivity"],
+    "screenshots": [
+        {
+            "src": "https://images.pexels.com/photos/3683074/pexels-photo-3683074.jpeg?auto=compress&cs=tinysrgb&w=540&h=720&fit=crop",
+            "sizes": "540x720",
+            "type": "image/jpeg"
+        }
+    ]
+}
