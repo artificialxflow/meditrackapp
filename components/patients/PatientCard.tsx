@@ -1,6 +1,7 @@
 import { Patient } from '@/lib/services/patientService';
 import { FaUser, FaBirthdayCake, FaVenusMars, FaTint } from 'react-icons/fa';
 import Button from '../ui/Button';
+import { Avatar } from '@/components/ui/Avatar';
 
 interface PatientCardProps {
   patient: Patient;
@@ -22,13 +23,11 @@ export default function PatientCard({ patient, onDelete, onEdit }: PatientCardPr
     <div className="card h-100">
       <div className="card-body">
         <div className="d-flex align-items-center mb-3">
-          <div className="avatar me-3">
-            <img 
-              src={patient.avatar_url || '/default-avatar.png'} 
-              alt={patient.full_name} 
-              className="rounded-circle" 
-              style={{ width: '60px', height: '60px', objectFit: 'cover' }}
-              loading="lazy"
+          <div className="me-3">
+            <Avatar
+              src={patient.avatar_url || undefined}
+              name={patient.full_name || undefined}
+              size={50}
             />
           </div>
           <div>
