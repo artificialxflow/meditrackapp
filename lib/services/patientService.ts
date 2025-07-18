@@ -75,26 +75,30 @@ export class PatientService {
   // Add a new patient for a user
   static async addPatient(userId: string, patientData: PatientFormData): Promise<Patient> {
     try {
-      // Validate and format date if provided
-      let formattedData = { ...patientData }
-      if (patientData.date_of_birth) {
-        // Ensure date is in YYYY-MM-DD format
-        const date = new Date(patientData.date_of_birth)
-        if (isNaN(date.getTime())) {
-          throw new Error('Invalid date format')
+      // Prepare data for insertion
+      const insertData: any = {
+        created_by: userId,
+        full_name: patientData.full_name.trim(),
+        gender: patientData.gender || 'other',
+        blood_type: patientData.blood_type || 'A+',
+        is_active: true
+      }
+
+      // Only add date_of_birth if it exists and is valid
+      if (patientData.date_of_birth && patientData.date_of_birth.trim()) {
+        try {
+          const date = new Date(patientData.date_of_birth)
+          if (!isNaN(date.getTime())) {
+            insertData.date_of_birth = date.toISOString().split('T')[0]
+          }
+        } catch (error) {
+          console.warn('Invalid date format, skipping date_of_birth')
         }
-        formattedData.date_of_birth = date.toISOString().split('T')[0]
       }
 
       const { data, error } = await supabase
         .from('patients')
-        .insert([
-          {
-            created_by: userId,
-            ...formattedData,
-            is_active: true
-          }
-        ])
+        .insert([insertData])
         .select()
         .single()
 
@@ -113,12 +117,32 @@ export class PatientService {
   // Update a patient's information
   static async updatePatient(patientId: string, patientData: Partial<PatientFormData>): Promise<Patient> {
     try {
+      // Prepare data for update
+      const updateData: any = {
+        full_name: patientData.full_name?.trim(),
+        gender: patientData.gender || 'other',
+        blood_type: patientData.blood_type || 'A+',
+        updated_at: new Date().toISOString()
+      }
+
+      // Only add date_of_birth if it exists and is valid
+      if (patientData.date_of_birth && patientData.date_of_birth.trim()) {
+        try {
+          const date = new Date(patientData.date_of_birth)
+          if (!isNaN(date.getTime())) {
+            updateData.date_of_birth = date.toISOString().split('T')[0]
+          }
+        } catch (error) {
+          console.warn('Invalid date format, skipping date_of_birth')
+        }
+      } else {
+        // Set to null if empty
+        updateData.date_of_birth = null
+      }
+
       const { data, error } = await supabase
         .from('patients')
-        .update({
-          ...patientData,
-          updated_at: new Date().toISOString()
-        })
+        .update(updateData)
         .eq('id', patientId)
         .select()
         .single()
