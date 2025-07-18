@@ -58,7 +58,7 @@ export class PatientService {
         .from('patients')
         .select('*')
         .eq('id', patientId)
-        .single()
+        .maybeSingle()
 
       if (error) {
         console.error('Error fetching patient by ID:', error)
@@ -75,12 +75,23 @@ export class PatientService {
   // Add a new patient for a user
   static async addPatient(userId: string, patientData: PatientFormData): Promise<Patient> {
     try {
+      // Validate and format date if provided
+      let formattedData = { ...patientData }
+      if (patientData.date_of_birth) {
+        // Ensure date is in YYYY-MM-DD format
+        const date = new Date(patientData.date_of_birth)
+        if (isNaN(date.getTime())) {
+          throw new Error('Invalid date format')
+        }
+        formattedData.date_of_birth = date.toISOString().split('T')[0]
+      }
+
       const { data, error } = await supabase
         .from('patients')
         .insert([
           {
             created_by: userId,
-            ...patientData,
+            ...formattedData,
             is_active: true
           }
         ])
