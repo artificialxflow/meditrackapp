@@ -2,125 +2,104 @@
 
 import Link from 'next/link'
 import { useAuth } from '@/hooks/useAuth'
-import { FaPills, FaUser, FaSignOutAlt, FaBars, FaTimes } from 'react-icons/fa'
-import { useState } from 'react'
+import { useTheme } from '@/providers/ThemeProvider'
+import { FaSun, FaMoon } from 'react-icons/fa'
 
 export default function Navbar() {
-  const { user, logout } = useAuth()
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-
-  const handleLogout = async () => {
-    await logout()
-    window.location.href = '/'
-  }
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
+  const { user, signOut } = useAuth()
+  const { theme, toggleTheme } = useTheme()
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm border-bottom">
-      <div className="container">
-        {/* Logo */}
-        <Link href="/" className="navbar-brand d-flex align-items-center">
-          <div className="w-10 h-10 bg-gradient-to-r rounded-3 d-flex align-items-center justify-content-center me-3">
-            <FaPills className="text-white fs-5" />
-          </div>
-          <div>
-            <span className="fs-4 fw-bold text-dark">دارویار</span>
-            <div className="text-muted small">MediTrack</div>
-          </div>
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <div className="container-fluid">
+        <Link href="/" className="navbar-brand">
+          MediTrack
         </Link>
-
-        {/* Mobile Toggle */}
         <button
-          className="navbar-toggler border-0"
+          className="navbar-toggler"
           type="button"
-          onClick={toggleMenu}
-          aria-expanded={isMenuOpen}
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          {isMenuOpen ? <FaTimes /> : <FaBars />}
+          <span className="navbar-toggler-icon"></span>
         </button>
-
-        {/* Navigation Items */}
-        <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`}>
+        <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <Link href="/" className="nav-link">
-                صفحه اصلی
-              </Link>
-            </li>
             {user && (
               <>
                 <li className="nav-item">
+                  <Link href="/dashboard" className="nav-link">
+                    Dashboard
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link href="/patients" className="nav-link">
+                    Patients
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link href="/families" className="nav-link">
+                    Families
+                  </Link>
+                </li>
+                <li className="nav-item">
                   <Link href="/medicines" className="nav-link">
-                    داروها
+                    Medicines
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link href="/appointments" className="nav-link">
-                    ویزیت‌ها
+                    Appointments
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link href="/reports" className="nav-link">
-                    گزارش‌ها
+                  <Link href="/vitals" className="nav-link">
+                    Vitals
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link href="/documents" className="nav-link">
+                    Documents
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link href="/notifications" className="nav-link">
+                    Notifications
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link href="/profile" className="nav-link">
+                    Profile
                   </Link>
                 </li>
               </>
             )}
-            <li className="nav-item">
-              <Link href="#features" className="nav-link">
-                ویژگی‌ها
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link href="#pricing" className="nav-link">
-                قیمت‌گذاری
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link href="#contact" className="nav-link">
-                تماس با ما
-              </Link>
-            </li>
           </ul>
-
-          {/* Auth Buttons */}
-          <div className="d-flex align-items-center gap-3">
+          <ul className="navbar-nav">
+            <li className="nav-item">
+              <button className="btn btn-link nav-link" onClick={toggleTheme}>
+                {theme === 'light' ? <FaMoon /> : <FaSun />}
+              </button>
+            </li>
             {user ? (
-              <>
-                <div className="d-flex align-items-center text-muted">
-                  <FaUser className="ms-2" />
-                  <span className="d-none d-md-inline">
-                    {user.user_metadata?.full_name || user.email}
-                  </span>
-                </div>
-                <Link href="/dashboard" className="btn btn-primary btn-sm">
-                  داشبورد
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="btn btn-outline-danger btn-sm d-flex align-items-center"
-                >
-                  <FaSignOutAlt className="ms-1" />
-                  <span className="d-none d-md-inline">خروج</span>
+              <li className="nav-item">
+                <button onClick={signOut} className="btn btn-link nav-link">
+                  Sign Out
                 </button>
-              </>
+              </li>
             ) : (
-              <>
-                <Link href="/login" className="btn btn-outline-primary btn-sm">
-                  ورود
+              <li className="nav-item">
+                <Link href="/auth/login" className="nav-link">
+                  Sign In
                 </Link>
-                <Link href="/register" className="btn btn-primary btn-sm">
-                  ثبت‌نام
-                </Link>
-              </>
+              </li>
             )}
-          </div>
+          </ul>
         </div>
       </div>
     </nav>
   )
-} 
+}
