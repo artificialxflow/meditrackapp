@@ -29,6 +29,11 @@ export default function AddPatientModal({ show, onHide, onSubmit, initialData }:
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Validate date format before submitting
+    if (formData.date_of_birth && !formData.date_of_birth.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      alert('لطفاً تاریخ را به فرمت صحیح وارد کنید');
+      return;
+    }
     onSubmit(formData);
   };
 
@@ -38,44 +43,68 @@ export default function AddPatientModal({ show, onHide, onSubmit, initialData }:
     <div className="modal fade show d-block" tabIndex={-1} style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">{initialData ? 'Edit Patient' : 'Add New Patient'}</h5>
-            <button type="button" className="btn-close" onClick={onHide}></button>
+          <div className="modal-header bg-primary text-white">
+            <h5 className="modal-title">{initialData ? 'ویرایش بیمار' : 'افزودن بیمار جدید'}</h5>
+            <button type="button" className="btn-close btn-close-white" onClick={onHide}></button>
           </div>
           <div className="modal-body">
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label className="form-label">Full Name</label>
-                <Input name="full_name" value={formData.full_name} onChange={handleChange} required />
+                <label className="form-label">نام کامل</label>
+                <Input 
+                  name="full_name" 
+                  value={formData.full_name} 
+                  onChange={handleChange} 
+                  required 
+                  placeholder="نام کامل بیمار را وارد کنید"
+                />
               </div>
               <div className="mb-3">
-                <label className="form-label">Date of Birth</label>
-                <Input type="date" name="date_of_birth" value={formData.date_of_birth || ''} onChange={handleChange} />
+                <label className="form-label">تاریخ تولد</label>
+                <Input 
+                  type="date" 
+                  name="date_of_birth" 
+                  value={formData.date_of_birth || ''} 
+                  onChange={handleChange}
+                  max={new Date().toISOString().split('T')[0]}
+                />
               </div>
               <div className="mb-3">
-                <label className="form-label">Gender</label>
-                <Select name="gender" value={formData.gender || 'other'} onChange={handleChange}>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
-                </Select>
+                <label className="form-label">جنسیت</label>
+                <Select 
+                  name="gender" 
+                  value={formData.gender || 'other'} 
+                  onChange={handleChange}
+                  options={[
+                    { value: 'male', label: 'مرد' },
+                    { value: 'female', label: 'زن' },
+                    { value: 'other', label: 'سایر' }
+                  ]}
+                  placeholder="جنسیت را انتخاب کنید"
+                />
               </div>
               <div className="mb-3">
-                <label className="form-label">Blood Type</label>
-                <Select name="blood_type" value={formData.blood_type || 'A+'} onChange={handleChange}>
-                  <option value="A+">A+</option>
-                  <option value="A-">A-</option>
-                  <option value="B+">B+</option>
-                  <option value="B-">B-</option>
-                  <option value="AB+">AB+</option>
-                  <option value="AB-">AB-</option>
-                  <option value="O+">O+</option>
-                  <option value="O-">O-</option>
-                </Select>
+                <label className="form-label">گروه خونی</label>
+                <Select 
+                  name="blood_type" 
+                  value={formData.blood_type || 'A+'} 
+                  onChange={handleChange}
+                  options={[
+                    { value: 'A+', label: 'A+' },
+                    { value: 'A-', label: 'A-' },
+                    { value: 'B+', label: 'B+' },
+                    { value: 'B-', label: 'B-' },
+                    { value: 'AB+', label: 'AB+' },
+                    { value: 'AB-', label: 'AB-' },
+                    { value: 'O+', label: 'O+' },
+                    { value: 'O-', label: 'O-' }
+                  ]}
+                  placeholder="گروه خونی را انتخاب کنید"
+                />
               </div>
               <div className="d-flex justify-content-end">
-                <Button type="button" className="btn-secondary me-2" onClick={onHide}>Cancel</Button>
-                <Button type="submit" className="btn-primary">{initialData ? 'Save Changes' : 'Add Patient'}</Button>
+                <Button type="button" className="btn-secondary me-2" onClick={onHide}>انصراف</Button>
+                <Button type="submit" className="btn-primary">{initialData ? 'ذخیره تغییرات' : 'افزودن بیمار'}</Button>
               </div>
             </form>
           </div>
