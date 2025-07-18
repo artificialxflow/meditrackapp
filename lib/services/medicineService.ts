@@ -1,46 +1,75 @@
 import { supabase } from '../supabase/client'
 
+// Matches the ENUM types in the database
+export type MedicationType = 'tablet' | 'capsule' | 'liquid' | 'injection' | 'inhaler' | 'cream' | 'drops' | 'suppository';
+export type DosageForm = 'mg' | 'mcg' | 'ml' | 'units' | 'puffs' | 'drops' | 'tablets' | 'capsules';
+
+// Interface matching the 'medications' table schema
 export interface Medicine {
   id?: string
-  user_id: string
+  patient_id: string
   name: string
-  generic_name?: string
-  dosage_form: string
-  strength: string
-  manufacturer?: string
-  description?: string
+  medication_type: MedicationType
+  dosage_form: DosageForm
+  strength?: number
+  strength_unit?: string
   instructions?: string
-  side_effects?: string
-  interactions?: string
-  storage_conditions?: string
-  prescription_required: boolean
+  image_url?: string
+  quantity?: number; // Added quantity
+  expiration_date?: string; // Added expiration_date
   is_active: boolean
+  created_by: string
   created_at?: string
   updated_at?: string
 }
 
+// Interface for form data when creating a new medicine
 export interface MedicineFormData {
   name: string
-  generic_name?: string
-  dosage_form: string
-  strength: string
-  manufacturer?: string
-  description?: string
+  medication_type: MedicationType
+  dosage_form: DosageForm
+  strength?: number
+  strength_unit?: string
   instructions?: string
-  side_effects?: string
-  interactions?: string
-  storage_conditions?: string
-  prescription_required: boolean
+  quantity?: number; // Added quantity
+  expiration_date?: string; // Added expiration_date
 }
 
 export class MedicineService {
-  // دریافت تمام داروهای کاربر
-  static async getMedicines(userId: string): Promise<Medicine[]> {
+
+  /**
+   * Finds the patient ID associated with a user. 
+   * This assumes a user has one primary patient profile they manage.
+   */
+  static async getPatientIdForUser(userId: string): Promise<string | null> {
     try {
       const { data, error } = await supabase
-        .from('medicines')
+        .from('patients')
+        .select('id')
+        .eq('created_by', userId)
+        .limit(1)
+        .single() // Expects a single patient profile for the user
+
+      if (error) {
+        console.error('Error fetching patient for user:', error)
+        if (error.code === 'PGRST116') return null // No patient found, not an error
+        throw error
+      }
+
+      return data?.id || null
+    } catch (error) {
+      console.error('Error in getPatientIdForUser:', error)
+      throw error
+    }
+  }
+
+  // Get all medicines for a specific patient
+  static async getMedicines(patientId: string): Promise<Medicine[]> {
+    try {
+      const { data, error } = await supabase
+        .from('medications')
         .select('*')
-        .eq('user_id', userId)
+        .eq('patient_id', patientId)
         .eq('is_active', true)
         .order('created_at', { ascending: false })
 
@@ -56,14 +85,15 @@ export class MedicineService {
     }
   }
 
-  // اضافه کردن داروی جدید
-  static async addMedicine(userId: string, medicineData: MedicineFormData): Promise<Medicine> {
+  // Add a new medicine for a patient
+  static async addMedicine(patientId: string, userId: string, medicineData: MedicineFormData): Promise<Medicine> {
     try {
       const { data, error } = await supabase
-        .from('medicines')
+        .from('medications')
         .insert([
           {
-            user_id: userId,
+            patient_id: patientId,
+            created_by: userId,
             ...medicineData,
             is_active: true
           }
@@ -83,11 +113,11 @@ export class MedicineService {
     }
   }
 
-  // به‌روزرسانی دارو
+  // Update a medicine
   static async updateMedicine(medicineId: string, medicineData: Partial<MedicineFormData>): Promise<Medicine> {
     try {
       const { data, error } = await supabase
-        .from('medicines')
+        .from('medications')
         .update({
           ...medicineData,
           updated_at: new Date().toISOString()
@@ -108,11 +138,11 @@ export class MedicineService {
     }
   }
 
-  // حذف دارو (soft delete)
+  // Soft delete a medicine
   static async deleteMedicine(medicineId: string): Promise<void> {
     try {
       const { error } = await supabase
-        .from('medicines')
+        .from('medications')
         .update({ 
           is_active: false,
           updated_at: new Date().toISOString()
@@ -128,69 +158,4 @@ export class MedicineService {
       throw error
     }
   }
-
-  // جستجو در داروها
-  static async searchMedicines(userId: string, searchTerm: string): Promise<Medicine[]> {
-    try {
-      const { data, error } = await supabase
-        .from('medicines')
-        .select('*')
-        .eq('user_id', userId)
-        .eq('is_active', true)
-        .or(`name.ilike.%${searchTerm}%,generic_name.ilike.%${searchTerm}%,manufacturer.ilike.%${searchTerm}%`)
-        .order('created_at', { ascending: false })
-
-      if (error) {
-        console.error('Error searching medicines:', error)
-        throw error
-      }
-
-      return data || []
-    } catch (error) {
-      console.error('Error in searchMedicines:', error)
-      throw error
-    }
-  }
-
-  // فیلتر کردن داروها
-  static async filterMedicines(
-    userId: string, 
-    filters: {
-      dosage_form?: string
-      prescription_required?: boolean
-      manufacturer?: string
-    }
-  ): Promise<Medicine[]> {
-    try {
-      let query = supabase
-        .from('medicines')
-        .select('*')
-        .eq('user_id', userId)
-        .eq('is_active', true)
-
-      if (filters.dosage_form) {
-        query = query.eq('dosage_form', filters.dosage_form)
-      }
-
-      if (filters.prescription_required !== undefined) {
-        query = query.eq('prescription_required', filters.prescription_required)
-      }
-
-      if (filters.manufacturer) {
-        query = query.ilike('manufacturer', `%${filters.manufacturer}%`)
-      }
-
-      const { data, error } = await query.order('created_at', { ascending: false })
-
-      if (error) {
-        console.error('Error filtering medicines:', error)
-        throw error
-      }
-
-      return data || []
-    } catch (error) {
-      console.error('Error in filterMedicines:', error)
-      throw error
-    }
-  }
-} 
+}
