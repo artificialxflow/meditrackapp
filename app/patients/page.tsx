@@ -120,25 +120,32 @@ export default function PatientsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-light">
+    <div className="min-vh-100 bg-light">
       <Navbar />
-      <div className="container mx-auto px-4 py-8">
+      <div className="container py-5">
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <h1 className="h2 text-primary">Manage Patients</h1>
+          <h1 className="h2 text-primary">مدیریت بیماران</h1>
           <Button onClick={() => setShowAddModal(true)} className="btn-primary">
             <FaPlus className="me-2" />
-            Add Patient
+            افزودن بیمار
           </Button>
         </div>
 
-        {error && <div className="alert alert-danger">{error}</div>}
+        {error && <div className="alert alert-danger">خطا در بارگذاری بیماران.</div>}
 
         {loading ? (
-          <Loading />
+          <div className="text-center py-5">
+            <Loading />
+            <p className="mt-3 text-muted">در حال بارگذاری بیماران...</p>
+          </div>
         ) : patients.length === 0 ? (
           <div className="text-center py-5">
-            <h3 className="h4 text-muted">No patients found.</h3>
-            <p className="text-muted">Get started by adding a new patient.</p>
+            <h3 className="h4 text-muted">هیچ بیماری یافت نشد.</h3>
+            <p className="text-muted">با افزودن یک بیمار جدید شروع کنید.</p>
+            <Button onClick={() => setShowAddModal(true)} className="btn-primary mt-3">
+              <FaPlus className="me-2" />
+              افزودن اولین بیمار
+            </Button>
           </div>
         ) : (
           <div className="row g-4">
@@ -146,7 +153,7 @@ export default function PatientsPage() {
               <div key={patient.id} className="col-lg-6 col-xl-4">
                 <PatientCard patient={patient} onDelete={handleDeletePatient} onEdit={handleEdit} />
                 <Button className="btn-sm btn-outline-info mt-2" onClick={() => handleShare(patient.id!)}>
-                  <FaShareAlt className="me-1" /> Share
+                  <FaShareAlt className="me-1" /> اشتراک‌گذاری
                 </Button>
               </div>
             ))}
