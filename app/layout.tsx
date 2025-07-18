@@ -1,13 +1,18 @@
 import './globals.css'
-import { Inter } from 'next/font/google'
-import AuthProvider from '@/providers/AuthProvider'
+import { Vazirmatn } from 'next/font/google'
+import { AuthProvider } from '@/providers/AuthProvider'
 import { ThemeProvider } from '@/providers/ThemeProvider'
+import Script from 'next/script'
 
-const inter = Inter({ subsets: ['latin'] })
+const vazir = Vazirmatn({ 
+  subsets: ['arabic'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  variable: '--font-vazir'
+})
 
 export const metadata = {
-  title: 'MediTrack',
-  description: 'Your personal medication and health tracker',
+  title: 'دارویار - مدیریت هوشمند داروها',
+  description: 'اپلیکیشن مدیریت دارو و سلامتی برای افراد، خانواده‌ها و مراکز درمانی',
 }
 
 export default function RootLayout({
@@ -16,13 +21,18 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="fa" dir="rtl">
+      <body className={`${vazir.variable} font-vazir`}>
         <AuthProvider>
           <ThemeProvider>
             {children}
           </ThemeProvider>
         </AuthProvider>
+        <Script 
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+          crossOrigin="anonymous"
+        />
       </body>
     </html>
   )
