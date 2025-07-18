@@ -34,6 +34,29 @@ CREATE TABLE organization_members (
   UNIQUE(organization_id, user_id)
 );
 
+-- جدول پروفایل کاربران
+CREATE TABLE profiles (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  full_name VARCHAR(255),
+  phone VARCHAR(20),
+  date_of_birth DATE,
+  gender VARCHAR(10) CHECK (gender IN ('male', 'female', 'other')),
+  emergency_contact VARCHAR(255),
+  emergency_phone VARCHAR(20),
+  medical_history TEXT,
+  allergies TEXT[],
+  blood_type VARCHAR(5),
+  height INTEGER, -- سانتی‌متر
+  weight DECIMAL(5,2), -- کیلوگرم
+  preferences JSONB DEFAULT '{}',
+  avatar_url TEXT,
+  is_active BOOLEAN DEFAULT true,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
+  UNIQUE(user_id)
+);
+
 -- جدول بخش‌ها (برای بیمارستان‌ها و کلینیک‌ها)
 CREATE TABLE departments (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -354,6 +377,7 @@ CREATE INDEX idx_support_tickets_organization ON support_tickets(organization_id
 -- ========================================
 
 -- Enable RLS on all tables
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE organizations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE organization_members ENABLE ROW LEVEL SECURITY;
 ALTER TABLE departments ENABLE ROW LEVEL SECURITY;
@@ -375,6 +399,17 @@ ALTER TABLE support_messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE medical_guidelines ENABLE ROW LEVEL SECURITY;
 ALTER TABLE inventory ENABLE ROW LEVEL SECURITY;
 
+-- RLS Policies for profiles
+-- کاربران فقط می‌توانند پروفایل خود را ببینند و ویرایش کنند
+CREATE POLICY "Users can view own profile" ON profiles
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own profile" ON profiles
+  FOR UPDATE USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own profile" ON profiles
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
 -- ========================================
 -- TRIGGERS FOR UPDATED_AT
 -- ========================================
@@ -389,8 +424,27 @@ END;
 $$ language 'plpgsql';
 
 -- Create triggers for updated_at
+-- Trigger برای ایجاد خودکار پروفایل کاربر
+CREATE OR REPLACE FUNCTION handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO profiles (user_id, full_name, phone)
+  VALUES (
+    NEW.id,
+    COALESCE(NEW.raw_user_meta_data->>'full_name', NEW.raw_user_meta_data->>'first_name' || ' ' || NEW.raw_user_meta_data->>'last_name'),
+    NEW.raw_user_meta_data->>'phone'
+  );
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION handle_new_user();
+
 CREATE TRIGGER update_organizations_updated_at BEFORE UPDATE ON organizations FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_organization_members_updated_at BEFORE UPDATE ON organization_members FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_profiles_updated_at BEFORE UPDATE ON profiles FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_patients_updated_at BEFORE UPDATE ON patients FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_patient_shares_updated_at BEFORE UPDATE ON patient_shares FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_medicines_updated_at BEFORE UPDATE ON medicines FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
