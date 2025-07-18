@@ -48,11 +48,10 @@ export class MedicineService {
         .select('id')
         .eq('created_by', userId)
         .limit(1)
-        .single() // Expects a single patient profile for the user
+        .maybeSingle() // Use maybeSingle instead of single
 
       if (error) {
         console.error('Error fetching patient for user:', error)
-        if (error.code === 'PGRST116') return null // No patient found, not an error
         throw error
       }
 
