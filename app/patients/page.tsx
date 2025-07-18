@@ -1,0 +1,175 @@
+'use client'
+
+import { useState, useEffect, useCallback } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import { PatientService, Patient, PatientFormData } from '@/lib/services/patientService';
+import { FamilyService } from '@/lib/services/familyService'; // Import FamilyService to find profile by email
+import PatientCard from '@/components/patients/PatientCard';
+import AddPatientModal from '@/components/patients/AddPatientModal';
+import SharePatientModal from '@/components/patients/SharePatientModal';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import Loading from '@/components/Loading';
+import Button from '@/components/ui/Button';
+import { FaPlus, FaShareAlt } from 'react-icons/fa';
+
+export default function PatientsPage() {
+  const { user } = useAuth();
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [editingPatient, setEditingPatient] = useState<Patient | null>(null);
+  const [sharingPatientId, setSharingPatientId] = useState<string | null>(null);
+  const [error, setError] = useState('');
+
+  const fetchPatients = useCallback(async () => {
+    if (!user?.id) return;
+    try {
+      setLoading(true);
+      setError('');
+      const data = await PatientService.getPatients(user.id);
+      setPatients(data);
+    } catch (err) {
+      console.error('Error fetching patients:', err);
+      setError('Failed to fetch patients.');
+    } finally {
+      setLoading(false);
+    }
+  }, [user?.id]);
+
+  const handleAddPatient = async (patientData: PatientFormData) => {
+    if (!user?.id) return;
+    try {
+      setError('');
+      const newPatient = await PatientService.addPatient(user.id, patientData);
+      setPatients(prev => [newPatient, ...prev]);
+      setShowAddModal(false);
+    } catch (err) {
+      console.error('Error adding patient:', err);
+      setError('Failed to add patient.');
+    }
+  };
+
+  const handleUpdatePatient = async (patientData: PatientFormData) => {
+    if (!editingPatient?.id) return;
+    try {
+      setError('');
+      const updatedPatient = await PatientService.updatePatient(editingPatient.id, patientData);
+      setPatients(prev => prev.map(p => p.id === updatedPatient.id ? updatedPatient : p));
+      setShowAddModal(false);
+      setEditingPatient(null);
+    } catch (err) {
+      console.error('Error updating patient:', err);
+      setError('Failed to update patient.');
+    }
+  };
+
+  const handleDeletePatient = async (patientId: string) => {
+    try {
+      setError('');
+      await PatientService.deletePatient(patientId);
+      setPatients(prev => prev.filter(p => p.id !== patientId));
+    } catch (err) {
+      console.error('Error deleting patient:', err);
+      setError('Failed to delete patient.');
+    }
+  };
+
+  const handleSharePatient = async (email: string, permission: 'view_only' | 'edit_access' | 'full_access') => {
+    if (!user?.id || !sharingPatientId) return;
+    try {
+      setError('');
+      const sharedWithProfile = await FamilyService.findProfileByEmail(email);
+      if (!sharedWithProfile) {
+        setError('User with this email not found.');
+        return;
+      }
+      await PatientService.sharePatient(sharingPatientId, sharedWithProfile.id, user.id, permission);
+      setShowShareModal(false);
+      setSharingPatientId(null);
+      alert('Patient shared successfully!');
+    } catch (err) {
+      console.error('Error sharing patient:', err);
+      setError('Failed to share patient.');
+    }
+  };
+
+  useEffect(() => {
+    fetchPatients();
+  }, [fetchPatients]);
+
+  const handleEdit = (patient: Patient) => {
+    setEditingPatient(patient);
+    setShowAddModal(true);
+  };
+
+  const handleShare = (patientId: string) => {
+    setSharingPatientId(patientId);
+    setShowShareModal(true);
+  };
+
+  const handleCloseAddModal = () => {
+    setShowAddModal(false);
+    setEditingPatient(null);
+  };
+
+  const handleCloseShareModal = () => {
+    setShowShareModal(false);
+    setSharingPatientId(null);
+  };
+
+  return (
+    <div className="min-h-screen bg-light">
+      <Navbar />
+      <div className="container mx-auto px-4 py-8">
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h1 className="h2 text-primary">Manage Patients</h1>
+          <Button onClick={() => setShowAddModal(true)} className="btn-primary">
+            <FaPlus className="me-2" />
+            Add Patient
+          </Button>
+        </div>
+
+        {error && <div className="alert alert-danger">{error}</div>}
+
+        {loading ? (
+          <Loading />
+        ) : patients.length === 0 ? (
+          <div className="text-center py-5">
+            <h3 className="h4 text-muted">No patients found.</h3>
+            <p className="text-muted">Get started by adding a new patient.</p>
+          </div>
+        ) : (
+          <div className="row g-4">
+            {patients.map(patient => (
+              <div key={patient.id} className="col-lg-6 col-xl-4">
+                <PatientCard patient={patient} onDelete={handleDeletePatient} onEdit={handleEdit} />
+                <Button className="btn-sm btn-outline-info mt-2" onClick={() => handleShare(patient.id!)}>
+                  <FaShareAlt className="me-1" /> Share
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <AddPatientModal
+        show={showAddModal}
+        onHide={handleCloseAddModal}
+        onSubmit={editingPatient ? handleUpdatePatient : handleAddPatient}
+        initialData={editingPatient}
+      />
+
+      {sharingPatientId && (
+        <SharePatientModal
+          show={showShareModal}
+          onHide={handleCloseShareModal}
+          onSubmit={handleSharePatient}
+        />
+      )}
+
+      <Footer />
+    </div>
+  );
+}
