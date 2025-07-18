@@ -1,0 +1,302 @@
+'use client'
+
+import { useState, useEffect, useCallback } from 'react'
+import { useAuth } from '@/hooks/useAuth'
+import { MedicineService, Medicine, MedicineFormData } from '@/lib/services/medicineService'
+import MedicineCard from '@/components/medicines/MedicineCard'
+import AddMedicineModal from '@/components/medicines/AddMedicineModal'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
+import Loading from '@/components/Loading'
+import Button from '@/components/ui/Button'
+import Input from '@/components/ui/Input'
+import Select from '@/components/ui/Select'
+import { FaPlus, FaSearch, FaSort } from 'react-icons/fa'
+
+export default function MedicinesPage() {
+  const { user } = useAuth()
+  const [medicines, setMedicines] = useState<Medicine[]>([])
+  const [filteredMedicines, setFilteredMedicines] = useState<Medicine[]>([])
+  const [loading, setLoading] = useState(true)
+  const [showAddModal, setShowAddModal] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [sortBy, setSortBy] = useState('name')
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
+  const [filterDosageForm, setFilterDosageForm] = useState('')
+  const [filterPrescription, setFilterPrescription] = useState('')
+  const [error, setError] = useState('')
+
+  // دریافت داروها از Supabase
+  const fetchMedicines = useCallback(async () => {
+    if (!user?.id) return
+    
+    try {
+      setLoading(true)
+      setError('')
+      const data = await MedicineService.getMedicines(user.id)
+      setMedicines(data)
+      setFilteredMedicines(data)
+    } catch (err) {
+      console.error('Error fetching medicines:', err)
+      setError('خطا در دریافت داروها')
+    } finally {
+      setLoading(false)
+    }
+  }, [user?.id])
+
+  // اضافه کردن داروی جدید
+  const handleAddMedicine = async (medicineData: MedicineFormData) => {
+    if (!user?.id) return
+    
+    try {
+      setError('')
+      const newMedicine = await MedicineService.addMedicine(user.id, medicineData)
+      setMedicines(prev => [newMedicine, ...prev])
+      setFilteredMedicines(prev => [newMedicine, ...prev])
+      setShowAddModal(false)
+    } catch (err) {
+      console.error('Error adding medicine:', err)
+      setError('خطا در اضافه کردن دارو')
+    }
+  }
+
+  // حذف دارو
+  const handleDeleteMedicine = async (medicineId: string) => {
+    try {
+      setError('')
+      await MedicineService.deleteMedicine(medicineId)
+      setMedicines(prev => prev.filter(m => m.id !== medicineId))
+      setFilteredMedicines(prev => prev.filter(m => m.id !== medicineId))
+    } catch (err) {
+      console.error('Error deleting medicine:', err)
+      setError('خطا در حذف دارو')
+    }
+  }
+
+  // جستجو و فیلتر
+  useEffect(() => {
+    let filtered = [...medicines]
+
+    // جستجو
+    if (searchTerm) {
+      filtered = filtered.filter(medicine =>
+        medicine.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        medicine.generic_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        medicine.manufacturer?.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    }
+
+    // فیلتر فرم دارویی
+    if (filterDosageForm) {
+      filtered = filtered.filter(medicine => medicine.dosage_form === filterDosageForm)
+    }
+
+    // فیلتر نسخه‌ای
+    if (filterPrescription) {
+      const prescriptionRequired = filterPrescription === 'true'
+      filtered = filtered.filter(medicine => medicine.prescription_required === prescriptionRequired)
+    }
+
+    // مرتب‌سازی
+    filtered.sort((a, b) => {
+      const aValue: string | number | boolean | undefined = a[sortBy as keyof Medicine]
+      const bValue: string | number | boolean | undefined = b[sortBy as keyof Medicine]
+
+      // تبدیل به string برای مقایسه
+      const aStr = String(aValue || '').toLowerCase()
+      const bStr = String(bValue || '').toLowerCase()
+
+      if (sortOrder === 'asc') {
+        return aStr > bStr ? 1 : -1
+      } else {
+        return aStr < bStr ? 1 : -1
+      }
+    })
+
+    setFilteredMedicines(filtered)
+  }, [medicines, searchTerm, sortBy, sortOrder, filterDosageForm, filterPrescription])
+
+  // دریافت داروها در لود اولیه
+  useEffect(() => {
+    fetchMedicines()
+  }, [fetchMedicines])
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-light">
+        <Navbar />
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center">
+            <Loading />
+            <p className="mt-4 text-muted">در حال بررسی احراز هویت...</p>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-light">
+      <Navbar />
+      
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <div>
+              <h1 className="h2 text-primary mb-2">مدیریت داروها</h1>
+              <p className="text-muted mb-0">داروهای خود را مدیریت کنید</p>
+            </div>
+            <Button
+              onClick={() => setShowAddModal(true)}
+              className="btn-primary"
+            >
+              <FaPlus className="ms-2" />
+              افزودن دارو
+            </Button>
+          </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="alert alert-danger" role="alert">
+              {error}
+            </div>
+          )}
+        </div>
+
+        {/* Search and Filters */}
+        <div className="card mb-4">
+          <div className="card-body">
+            <div className="row g-3">
+              {/* Search */}
+              <div className="col-md-4">
+                <div className="input-group">
+                  <span className="input-group-text">
+                    <FaSearch />
+                  </span>
+                  <Input
+                    type="text"
+                    placeholder="جستجو در داروها..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="form-control"
+                  />
+                </div>
+              </div>
+
+              {/* Dosage Form Filter */}
+              <div className="col-md-2">
+                <Select
+                  value={filterDosageForm}
+                  onChange={(e) => setFilterDosageForm(e.target.value)}
+                  className="form-select"
+                  options={[
+                    { value: '', label: 'همه فرم‌ها' },
+                    { value: 'قرص', label: 'قرص' },
+                    { value: 'کپسول', label: 'کپسول' },
+                    { value: 'شربت', label: 'شربت' },
+                    { value: 'آمپول', label: 'آمپول' },
+                    { value: 'پماد', label: 'پماد' },
+                    { value: 'قطره', label: 'قطره' },
+                    { value: 'اسپری', label: 'اسپری' }
+                  ]}
+                />
+              </div>
+
+              {/* Prescription Filter */}
+              <div className="col-md-2">
+                <Select
+                  value={filterPrescription}
+                  onChange={(e) => setFilterPrescription(e.target.value)}
+                  className="form-select"
+                  options={[
+                    { value: '', label: 'همه داروها' },
+                    { value: 'true', label: 'نسخه‌ای' },
+                    { value: 'false', label: 'بدون نسخه' }
+                  ]}
+                />
+              </div>
+
+              {/* Sort */}
+              <div className="col-md-2">
+                <Select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="form-select"
+                  options={[
+                    { value: 'name', label: 'نام' },
+                    { value: 'created_at', label: 'تاریخ اضافه' },
+                    { value: 'dosage_form', label: 'فرم دارویی' },
+                    { value: 'manufacturer', label: 'سازنده' }
+                  ]}
+                />
+              </div>
+
+              {/* Sort Order */}
+              <div className="col-md-2">
+                <Button
+                  onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
+                  className="btn-outline-secondary w-100"
+                >
+                  <FaSort className="ms-2" />
+                  {sortOrder === 'asc' ? 'صعودی' : 'نزولی'}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Medicines List */}
+        {loading ? (
+          <div className="text-center py-5">
+            <Loading />
+            <p className="mt-3 text-muted">در حال دریافت داروها...</p>
+          </div>
+        ) : filteredMedicines.length === 0 ? (
+          <div className="text-center py-5">
+            <div className="mb-4">
+              <FaPlus className="text-muted" style={{ fontSize: '3rem' }} />
+            </div>
+            <h3 className="h4 text-muted mb-3">هیچ دارویی یافت نشد</h3>
+            <p className="text-muted mb-4">
+              {searchTerm || filterDosageForm || filterPrescription
+                ? 'هیچ دارویی با فیلترهای انتخاب شده مطابقت ندارد'
+                : 'هنوز هیچ دارویی اضافه نکرده‌اید'
+              }
+            </p>
+            {!searchTerm && !filterDosageForm && !filterPrescription && (
+              <Button
+                onClick={() => setShowAddModal(true)}
+                className="btn-primary"
+              >
+                <FaPlus className="ms-2" />
+                افزودن اولین دارو
+              </Button>
+            )}
+          </div>
+        ) : (
+          <div className="row g-4">
+            {filteredMedicines.map((medicine) => (
+              <div key={medicine.id} className="col-lg-6 col-xl-4">
+                <MedicineCard
+                  medicine={medicine}
+                  onDelete={handleDeleteMedicine}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Add Medicine Modal */}
+      <AddMedicineModal
+        show={showAddModal}
+        onHide={() => setShowAddModal(false)}
+        onSubmit={handleAddMedicine}
+      />
+
+      <Footer />
+    </div>
+  )
+} 
