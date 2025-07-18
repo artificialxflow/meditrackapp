@@ -30,8 +30,23 @@ export default function MedicinesPage() {
   useEffect(() => {
     async function fetchPatientId() {
       if (user?.id) {
-        const id = await MedicineService.getPatientIdForUser(user.id)
-        setPatientId(id)
+        try {
+          const id = await MedicineService.getPatientIdForUser(user.id)
+          if (!id) {
+            // Create a default patient for the user if none exists
+            const { PatientService } = await import('@/lib/services/patientService')
+            const defaultPatient = await PatientService.addPatient(user.id, {
+              full_name: user.email?.split('@')[0] || 'کاربر',
+              gender: 'other'
+            })
+            setPatientId(defaultPatient.id || null)
+          } else {
+            setPatientId(id)
+          }
+        } catch (err) {
+          console.error('Error fetching/creating patient:', err)
+          setError('خطا در ایجاد پروفایل بیمار')
+        }
       }
     }
     fetchPatientId()
