@@ -42,12 +42,27 @@ export default function PatientsPage() {
     if (!user?.id) return;
     try {
       setError('');
-      const newPatient = await PatientService.addPatient(user.id, patientData);
+      
+      // Clean the data before sending
+      const cleanData = {
+        ...patientData,
+        full_name: patientData.full_name?.trim() || '',
+        date_of_birth: patientData.date_of_birth?.trim() || undefined,
+        gender: patientData.gender || 'other',
+        blood_type: patientData.blood_type || 'A+'
+      };
+      
+      // Remove empty date_of_birth
+      if (!cleanData.date_of_birth) {
+        delete cleanData.date_of_birth;
+      }
+      
+      const newPatient = await PatientService.addPatient(user.id, cleanData);
       setPatients(prev => [newPatient, ...prev]);
       setShowAddModal(false);
     } catch (err) {
       console.error('Error adding patient:', err);
-      setError('Failed to add patient.');
+      setError('خطا در افزودن بیمار.');
     }
   };
 
@@ -55,13 +70,28 @@ export default function PatientsPage() {
     if (!editingPatient?.id) return;
     try {
       setError('');
-      const updatedPatient = await PatientService.updatePatient(editingPatient.id, patientData);
+      
+      // Clean the data before sending
+      const cleanData = {
+        ...patientData,
+        full_name: patientData.full_name?.trim() || '',
+        date_of_birth: patientData.date_of_birth?.trim() || undefined,
+        gender: patientData.gender || 'other',
+        blood_type: patientData.blood_type || 'A+'
+      };
+      
+      // Remove empty date_of_birth
+      if (!cleanData.date_of_birth) {
+        delete cleanData.date_of_birth;
+      }
+      
+      const updatedPatient = await PatientService.updatePatient(editingPatient.id, cleanData);
       setPatients(prev => prev.map(p => p.id === updatedPatient.id ? updatedPatient : p));
       setShowAddModal(false);
       setEditingPatient(null);
     } catch (err) {
       console.error('Error updating patient:', err);
-      setError('Failed to update patient.');
+      setError('خطا در بروزرسانی بیمار.');
     }
   };
 
