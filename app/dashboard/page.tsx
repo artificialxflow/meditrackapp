@@ -1,151 +1,118 @@
 'use client'
 
-import { useAuth } from '@/hooks/useAuth'
-import { FaPills, FaCalendarAlt, FaBell, FaChartBar, FaCog } from 'react-icons/fa'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import Card from '@/components/ui/Card'
-import Button from '@/components/ui/Button'
+import { useState, useEffect, useCallback } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import { PatientService, Patient } from '@/lib/services/patientService';
+import { MedicineService, Medicine } from '@/lib/services/medicineService';
+import { AppointmentService, Appointment } from '@/lib/services/appointmentService';
+import { VitalsService, Vital } from '@/lib/services/vitalsService';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import Loading from '@/components/Loading';
+import { FaUser, FaPills, FaCalendarCheck, FaHeartbeat } from 'react-icons/fa';
 
 export default function DashboardPage() {
-  const { user, logout } = useAuth()
+  const { user } = useAuth();
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const [medicines, setMedicines] = useState<Medicine[]>([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [vitals, setVitals] = useState<Vital[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  if (!user) {
+  const fetchDashboardData = useCallback(async () => {
+    if (!user?.id) return;
+    try {
+      setLoading(true);
+      setError('');
+
+      // Fetch patients
+      const fetchedPatients = await PatientService.getPatients(user.id);
+      setPatients(fetchedPatients);
+
+      // For medicines, appointments, and vitals, we need a patient ID.
+      // For simplicity, we'll use the first patient found, or skip if none.
+      const firstPatientId = fetchedPatients.length > 0 ? fetchedPatients[0].id : null;
+
+      if (firstPatientId) {
+        const fetchedMedicines = await MedicineService.getMedicines(firstPatientId);
+        setMedicines(fetchedMedicines);
+
+        const fetchedAppointments = await AppointmentService.getAppointments(firstPatientId);
+        setAppointments(fetchedAppointments);
+
+        const fetchedVitals = await VitalsService.getVitals(firstPatientId);
+        setVitals(fetchedVitals);
+      }
+
+    } catch (err) {
+      console.error('Error fetching dashboard data:', err);
+      setError('Failed to load dashboard data.');
+    } finally {
+      setLoading(false);
+    }
+  }, [user?.id]);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]);
+
+  if (loading) {
     return (
       <div className="min-h-screen bg-light">
         <Navbar />
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <div className="spinner-border text-primary" role="status">
-              <span className="visually-hidden">در حال بارگذاری...</span>
-            </div>
-            <p className="mt-4 text-muted">در حال بررسی احراز هویت...</p>
-          </div>
+        <div className="container mx-auto px-4 py-8 text-center">
+          <Loading />
+          <p className="mt-4 text-muted">Loading dashboard...</p>
         </div>
         <Footer />
       </div>
-    )
+    );
   }
 
   return (
     <div className="min-h-screen bg-light">
       <Navbar />
-      
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="h2 text-primary mb-2">داشبورد</h1>
-          <p className="text-muted mb-0">خوش آمدید، {user.email}</p>
-        </div>
+        <h1 className="h2 text-primary mb-4">Dashboard</h1>
 
-        {/* Stats Cards */}
-        <div className="row g-4 mb-6">
-          <div className="col-md-3">
-            <Card
-              icon={FaPills}
-              iconColor="primary"
-              title="داروهای فعال"
-              subtitle="12 دارو"
-              className="text-center"
-            />
-          </div>
-          <div className="col-md-3">
-            <Card
-              icon={FaCalendarAlt}
-              iconColor="success"
-              title="یادآوری امروز"
-              subtitle="5 یادآوری"
-              className="text-center"
-            />
-          </div>
-          <div className="col-md-3">
-            <Card
-              icon={FaBell}
-              iconColor="warning"
-              title="هشدارها"
-              subtitle="2 هشدار"
-              className="text-center"
-            />
-          </div>
-          <div className="col-md-3">
-            <Card
-              icon={FaChartBar}
-              iconColor="info"
-              title="مصرف هفته"
-              subtitle="85%"
-              className="text-center"
-            />
-          </div>
-        </div>
+        {error && <div className="alert alert-danger">{error}</div>}
 
-        {/* Quick Actions */}
         <div className="row g-4">
-          <div className="col-md-6">
-            <Card
-              icon={FaPills}
-              iconColor="primary"
-              title="مدیریت داروها"
-              subtitle="افزودن، ویرایش و حذف داروها"
-            >
-              <div className="d-grid gap-2">
-                <Button
-                  href="/medicines"
-                  variant="primary"
-                  className="w-100"
-                >
-                  مشاهده داروها
-                </Button>
-              </div>
-            </Card>
-          </div>
-          
-          <div className="col-md-6">
-            <Card
-              icon={FaCalendarAlt}
-              iconColor="success"
-              title="یادآوری‌ها"
-              subtitle="مدیریت زمان‌بندی مصرف"
-            >
-              <div className="d-grid gap-2">
-                <Button
-                  href="/reminders"
-                  variant="success"
-                  className="w-100"
-                >
-                  مشاهده یادآوری‌ها
-                </Button>
-              </div>
-            </Card>
-          </div>
-        </div>
-
-        {/* Settings */}
-        <div className="mt-6">
-          <Card
-            icon={FaCog}
-            iconColor="secondary"
-            title="تنظیمات"
-            subtitle="مدیریت حساب کاربری"
-          >
-            <div className="d-flex gap-2">
-              <Button
-                variant="outline-secondary"
-                onClick={logout}
-              >
-                خروج
-              </Button>
-              <Button
-                href="/profile"
-                variant="outline-primary"
-              >
-                پروفایل
-              </Button>
+          <div className="col-md-6 col-lg-3">
+            <div className="card text-center p-3">
+              <FaUser className="text-primary mb-2" style={{ fontSize: '2rem' }} />
+              <h5 className="card-title">Patients</h5>
+              <p className="card-text display-4">{patients.length}</p>
             </div>
-          </Card>
+          </div>
+          <div className="col-md-6 col-lg-3">
+            <div className="card text-center p-3">
+              <FaPills className="text-success mb-2" style={{ fontSize: '2rem' }} />
+              <h5 className="card-title">Medicines</h5>
+              <p className="card-text display-4">{medicines.length}</p>
+            </div>
+          </div>
+          <div className="col-md-6 col-lg-3">
+            <div className="card text-center p-3">
+              <FaCalendarCheck className="text-info mb-2" style={{ fontSize: '2rem' }} />
+              <h5 className="card-title">Appointments</h5>
+              <p className="card-text display-4">{appointments.length}</p>
+            </div>
+          </div>
+          <div className="col-md-6 col-lg-3">
+            <div className="card text-center p-3">
+              <FaHeartbeat className="text-danger mb-2" style={{ fontSize: '2rem' }} />
+              <h5 className="card-title">Vitals</h5>
+              <p className="card-text display-4">{vitals.length}</p>
+            </div>
+          </div>
         </div>
-      </div>
 
+        {/* You can add more sections here, e.g., recent activities, upcoming appointments */}
+
+      </div>
       <Footer />
     </div>
-  )
-} 
+  );
+}
