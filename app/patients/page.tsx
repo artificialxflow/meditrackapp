@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { PatientService, Patient, PatientFormData } from '@/lib/services/patientService';
-import { FamilyService } from '@/lib/services/familyService'; // Import FamilyService to find profile by email
+import { ProfileService } from '@/lib/services/profileService';
+import { FamilyService } from '@/lib/services/familyService';
 import PatientCard from '@/components/patients/PatientCard';
 import AddPatientModal from '@/components/patients/AddPatientModal';
 import SharePatientModal from '@/components/patients/SharePatientModal';
@@ -42,6 +43,9 @@ export default function PatientsPage() {
     if (!user?.id) return;
     try {
       setError('');
+      
+      // Ensure user has a profile first
+      await ProfileService.ensureProfile();
       
       // Clean the data before sending
       const cleanData = {
