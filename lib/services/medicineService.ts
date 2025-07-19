@@ -4,7 +4,7 @@ import { supabase } from '../supabase/client'
 export type MedicationType = 'tablet' | 'capsule' | 'liquid' | 'injection' | 'inhaler' | 'cream' | 'drops' | 'suppository';
 export type DosageForm = 'mg' | 'mcg' | 'ml' | 'units' | 'puffs' | 'drops' | 'tablets' | 'capsules';
 
-// Interface matching the 'medications' table schema
+// Interface matching the 'medicines' table schema
 export interface Medicine {
   id?: string
   patient_id: string
@@ -15,8 +15,8 @@ export interface Medicine {
   strength_unit?: string
   instructions?: string
   image_url?: string
-  quantity?: number; // Added quantity
-  expiration_date?: string; // Added expiration_date
+  quantity?: number
+  expiration_date?: string
   is_active: boolean
   created_by: string
   created_at?: string
@@ -66,7 +66,7 @@ export class MedicineService {
   static async getMedicines(patientId: string): Promise<Medicine[]> {
     try {
       const { data, error } = await supabase
-        .from('medications')
+        .from('medicines')
         .select('*')
         .eq('patient_id', patientId)
         .eq('is_active', true)
@@ -84,16 +84,48 @@ export class MedicineService {
     }
   }
 
+  // Get a specific medicine by ID
+  static async getMedicineById(medicineId: string): Promise<Medicine | null> {
+    try {
+      console.log('Fetching medicine by ID:', medicineId);
+      const { data, error } = await supabase
+        .from('medicines')
+        .select('*')
+        .eq('id', medicineId)
+        .eq('is_active', true)
+        .single()
+
+      if (error) {
+        console.error('Error fetching medicine by ID:', error)
+        throw error
+      }
+
+      console.log('Found medicine:', data);
+      return data
+    } catch (error) {
+      console.error('Error in getMedicineById:', error)
+      return null
+    }
+  }
+
   // Add a new medicine for a patient
   static async addMedicine(patientId: string, userId: string, medicineData: MedicineFormData): Promise<Medicine> {
     try {
+      // Clean up the data - convert empty strings to null for date fields
+      const cleanedData = {
+        ...medicineData,
+        expiration_date: medicineData.expiration_date && medicineData.expiration_date.trim() !== '' 
+          ? medicineData.expiration_date 
+          : null
+      }
+
       const { data, error } = await supabase
-        .from('medications')
+        .from('medicines')
         .insert([
           {
             patient_id: patientId,
             created_by: userId,
-            ...medicineData,
+            ...cleanedData,
             is_active: true
           }
         ])
@@ -116,7 +148,7 @@ export class MedicineService {
   static async updateMedicine(medicineId: string, medicineData: Partial<MedicineFormData>): Promise<Medicine> {
     try {
       const { data, error } = await supabase
-        .from('medications')
+        .from('medicines')
         .update({
           ...medicineData,
           updated_at: new Date().toISOString()
@@ -141,7 +173,7 @@ export class MedicineService {
   static async deleteMedicine(medicineId: string): Promise<void> {
     try {
       const { error } = await supabase
-        .from('medications')
+        .from('medicines')
         .update({ 
           is_active: false,
           updated_at: new Date().toISOString()
