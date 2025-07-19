@@ -187,7 +187,7 @@ export default function LoginPage() {
                 )}
               </button>
               <Link
-                href="/register"
+                href="/auth/register"
                 className="btn btn-outline-primary py-2 text-decoration-none"
               >
                 ثبت‌نام
