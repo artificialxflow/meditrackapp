@@ -28,8 +28,10 @@ export default function RootLayout({
         <AuthProvider>
           <ThemeProvider>
             <SidebarProvider>
-              {children}
-              <Footer />
+              <div className="d-flex flex-column min-vh-100">
+                {children}
+                <Footer />
+              </div>
             </SidebarProvider>
           </ThemeProvider>
         </AuthProvider>
