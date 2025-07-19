@@ -143,9 +143,11 @@ export class MedicineService {
         }
       }
 
-      // Clean up the data - convert empty strings to null for date fields
+      // Clean up the data - remove image_file and convert empty strings to null for date fields
+      const { image_file, ...medicineDataWithoutFile } = medicineData;
+      
       const cleanedData = {
-        ...medicineData,
+        ...medicineDataWithoutFile,
         expiration_date: medicineData.expiration_date && medicineData.expiration_date.trim() !== '' 
           ? medicineData.expiration_date 
           : null,
