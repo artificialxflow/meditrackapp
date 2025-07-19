@@ -6,7 +6,7 @@ import { PatientService, Patient } from '@/lib/services/patientService';
 import { MedicineService, Medicine } from '@/lib/services/medicineService';
 import { AppointmentService, Appointment } from '@/lib/services/appointmentService';
 import { VitalsService, Vital } from '@/lib/services/vitalsService';
-import Navbar from '@/components/Navbar';
+import AppWrapper from '@/components/AppWrapper';
 import Loading from '@/components/Loading';
 import { FaUser, FaPills, FaCalendarCheck, FaHeartbeat, FaChartLine, FaClock, FaExclamationTriangle } from 'react-icons/fa';
 
@@ -68,10 +68,9 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="bg-light">
-      <Navbar />
-      
-      <main className="bg-light">
+    <AppWrapper>
+      <div className="bg-light">
+        <main className="bg-light">
         <div className="container py-5">
           {/* Header Section */}
           <div className="row mb-5">
@@ -249,6 +248,7 @@ export default function DashboardPage() {
           </div>
         </div>
       </main>
-    </div>
+      </div>
+    </AppWrapper>
   );
 }
