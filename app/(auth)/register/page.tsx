@@ -251,23 +251,31 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading || !formData.agreeToTerms || formData.password !== formData.confirmPassword}
-              className="btn btn-primary w-100 py-2 mb-3"
-            >
-              {loading ? (
-                <div className="d-flex align-items-center justify-content-center">
-                  <div className="spinner-border spinner-border-sm me-2" role="status">
-                    <span className="visually-hidden">در حال بارگذاری...</span>
+            {/* Submit Buttons */}
+            <div className="d-grid gap-2 mb-3">
+              <button
+                type="submit"
+                disabled={loading || !formData.agreeToTerms || formData.password !== formData.confirmPassword}
+                className="btn btn-primary py-2"
+              >
+                {loading ? (
+                  <div className="d-flex align-items-center justify-content-center">
+                    <div className="spinner-border spinner-border-sm me-2" role="status">
+                      <span className="visually-hidden">در حال بارگذاری...</span>
+                    </div>
+                    در حال ثبت‌نام...
                   </div>
-                  در حال ثبت‌نام...
-                </div>
-              ) : (
-                'ثبت‌نام'
-              )}
-            </button>
+                ) : (
+                  'ثبت‌نام'
+                )}
+              </button>
+              <Link
+                href="/login"
+                className="btn btn-outline-primary py-2 text-decoration-none"
+              >
+                ورود
+              </Link>
+            </div>
           </form>
 
           {/* Divider */}
@@ -289,29 +297,6 @@ export default function RegisterPage() {
               <span>ثبت‌نام با گوگل</span>
             </button>
           </div>
-
-          {/* Login Link */}
-          <div className="text-center mt-4">
-            <p className="text-muted">
-              قبلاً حساب کاربری دارید؟{' '}
-              <Link
-                href="/login"
-                className="text-decoration-none fw-semibold"
-              >
-                وارد شوید
-              </Link>
-            </p>
-          </div>
-        </div>
-
-        {/* Back to Home */}
-        <div className="text-center mt-4">
-          <Link
-            href="/"
-            className="text-decoration-none text-muted"
-          >
-            ← بازگشت به صفحه اصلی
-          </Link>
         </div>
       </div>
     </div>
