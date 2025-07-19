@@ -560,7 +560,7 @@ a {
 }
 
 .main-content.with-sidebar {
-  margin-right: 320px; /* افزایش margin از 280px به 320px */
+  margin-right: 380px; /* افزایش margin از 320px به 380px */
 }
 
 /* صفحه اصلی بدون سایدبار */
@@ -592,7 +592,7 @@ footer {
   position: fixed;
   top: 76px; /* ارتفاع navbar */
   right: 0;
-  width: 320px; /* افزایش عرض از 280px به 320px */
+  width: 380px; /* افزایش عرض از 320px به 380px */
   height: calc(100vh - 76px - 200px); /* ارتفاع navbar + footer */
   background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
   color: white;
@@ -612,7 +612,7 @@ footer {
   }
   
   .main-content.with-sidebar {
-    margin-right: 320px !important; /* افزایش margin از 280px به 320px */
+    margin-right: 380px !important; /* افزایش margin از 320px به 380px */
   }
 }
 
@@ -621,7 +621,7 @@ footer {
 }
 
 .sidebar-header {
-  padding: 2rem; /* افزایش padding از 1.5rem به 2rem */
+  padding: 1.5rem; /* کاهش padding به حالت عادی */
   border-bottom: 1px solid rgba(255,255,255,0.1);
   background: rgba(0,0,0,0.1);
 }
@@ -640,12 +640,12 @@ footer {
 
 .sidebar-nav-item {
   display: block;
-  padding: 1rem 2rem; /* افزایش padding از 0.75rem 1.5rem به 1rem 2rem */
+  padding: 0.75rem 1.5rem; /* کاهش padding به حالت عادی */
   color: rgba(255,255,255,0.8);
   text-decoration: none;
   transition: all 0.3s ease;
   border-right: 3px solid transparent;
-  font-size: 1.1rem; /* افزایش اندازه فونت */
+  font-size: 1rem; /* کاهش اندازه فونت به حالت عادی */
 }
 
 .sidebar-nav-item:hover {
@@ -663,7 +663,7 @@ footer {
 }
 
 .sidebar-footer {
-  padding: 1.5rem 2rem; /* افزایش padding از 1rem 1.5rem به 1.5rem 2rem */
+  padding: 1rem 1.5rem; /* کاهش padding به حالت عادی */
   border-top: 1px solid rgba(255,255,255,0.1);
   background: rgba(0,0,0,0.1);
 }
@@ -676,7 +676,7 @@ footer {
   
   .sidebar {
     width: 100%;
-    max-width: 360px; /* افزایش max-width از 320px به 360px */
+    max-width: 420px; /* افزایش max-width از 360px به 420px */
     top: 76px;
     height: calc(100vh - 76px - 200px);
     transform: translateX(100%);
