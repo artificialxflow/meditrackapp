@@ -6,7 +6,7 @@ import { AppointmentService, Appointment } from '@/lib/services/appointmentServi
 import { PatientService, Patient } from '@/lib/services/patientService';
 import AppointmentCard from '@/components/appointments/AppointmentCard';
 import AddAppointmentModal from '@/components/appointments/AddAppointmentModal';
-import Navbar from '@/components/Navbar';
+import AppWrapper from '@/components/AppWrapper';
 import Footer from '@/components/Footer';
 import Loading from '@/components/Loading';
 import Button from '@/components/ui/Button';
@@ -70,9 +70,9 @@ export default function AppointmentsPage() {
   }, [fetchAppointments]);
 
   return (
-    <div className="min-h-screen bg-light">
-      <Navbar />
-      <div className="container mx-auto px-4 py-8">
+    <AppWrapper>
+      <div className="min-h-screen bg-light">
+        <div className="container mx-auto px-4 py-8">
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h1 className="h2 text-primary">Manage Appointments</h1>
           <Button onClick={() => setShowAddModal(true)} className="btn-primary" disabled={!selectedPatient}>
