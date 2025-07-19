@@ -84,7 +84,7 @@ export default function Navbar() {
               </li>
             ) : (
               <li className="nav-item">
-                <Link href="/auth/login" className="nav-link">
+                <Link href="/login" className="nav-link">
                   ورود
                 </Link>
               </li>
