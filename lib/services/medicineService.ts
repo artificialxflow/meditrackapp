@@ -117,25 +117,30 @@ export class MedicineService {
 
       // آپلود عکس اگر وجود داشته باشد
       if (medicineData.image_file) {
-        const fileName = `medicines/${patientId}/${Date.now()}_${medicineData.image_file.name}`;
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('medicine-images')
-          .upload(fileName, medicineData.image_file, {
-            cacheControl: '3600',
-            upsert: false
-          });
+        try {
+          const fileName = `medicines/${patientId}/${Date.now()}_${medicineData.image_file.name}`;
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('images')
+            .upload(fileName, medicineData.image_file, {
+              cacheControl: '3600',
+              upsert: false
+            });
 
-        if (uploadError) {
+          if (uploadError) {
+            console.error('Error uploading image:', uploadError);
+            // اگر آپلود عکس شکست خورد، ادامه بده بدون عکس
+          } else {
+            // دریافت URL عمومی عکس
+            const { data: urlData } = supabase.storage
+              .from('images')
+              .getPublicUrl(fileName);
+            
+            imageUrl = urlData.publicUrl;
+          }
+        } catch (uploadError) {
           console.error('Error uploading image:', uploadError);
-          throw uploadError;
+          // اگر آپلود عکس شکست خورد، ادامه بده بدون عکس
         }
-
-        // دریافت URL عمومی عکس
-        const { data: urlData } = supabase.storage
-          .from('medicine-images')
-          .getPublicUrl(fileName);
-        
-        imageUrl = urlData.publicUrl;
       }
 
       // Clean up the data - convert empty strings to null for date fields
