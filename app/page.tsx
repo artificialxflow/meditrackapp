@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { FaPills, FaUsers, FaCalendarAlt, FaChartLine, FaShieldAlt, FaMobileAlt } from 'react-icons/fa'
 import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
 
 export default function HomePage() {
   return (
@@ -206,7 +205,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <Footer />
     </div>
   )
 }
