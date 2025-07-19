@@ -25,6 +25,7 @@ body {
   font-family: var(--font-vazir);
   direction: rtl;
   padding-top: 76px; /* برای navbar ثابت */
+  min-height: 100vh;
 }
 
 body {
@@ -548,19 +549,19 @@ a {
   display: flex;
   flex: 1;
   position: relative;
-  min-height: calc(100vh - 76px - 200px); /* ارتفاع navbar + footer */
+  min-height: calc(100vh - 76px); /* فقط ارتفاع navbar */
 }
 
 .main-content {
   flex: 1;
   padding: 2rem;
   transition: margin-right 0.3s ease;
-  min-height: calc(100vh - 76px - 200px); /* ارتفاع navbar + footer */
+  min-height: calc(100vh - 76px); /* فقط ارتفاع navbar */
   background-color: #f8f9fa;
 }
 
 .main-content.with-sidebar {
-  margin-right: 380px; /* افزایش margin از 320px به 380px */
+  margin-right: 280px; /* کاهش margin به 280px */
 }
 
 /* صفحه اصلی بدون سایدبار */
@@ -583,8 +584,13 @@ a {
 /* Footer Styles */
 footer {
   margin-top: auto;
-  background-color: #f8f9fa;
-  border-top: 1px solid #dee2e6;
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  color: white;
+  padding: 2rem 0;
+  text-align: center;
+  position: relative;
+  z-index: 1030;
+  margin-right: 280px; /* برای سایدبار */
 }
 
 /* Sidebar Styles */
@@ -592,8 +598,8 @@ footer {
   position: fixed;
   top: 76px; /* ارتفاع navbar */
   right: 0;
-  width: 380px; /* افزایش عرض از 320px به 380px */
-  height: calc(100vh - 76px - 200px); /* ارتفاع navbar + footer */
+  width: 280px; /* کاهش عرض به 280px */
+  height: 100vh; /* full-height */
   background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
   color: white;
   z-index: 1040;
@@ -612,7 +618,11 @@ footer {
   }
   
   .main-content.with-sidebar {
-    margin-right: 380px !important; /* افزایش margin از 320px به 380px */
+    margin-right: 280px !important; /* کاهش margin به 280px */
+  }
+  
+  footer {
+    margin-right: 280px !important; /* margin footer در desktop */
   }
 }
 
@@ -674,11 +684,15 @@ footer {
     margin-right: 0;
   }
   
+  footer {
+    margin-right: 0; /* حذف margin در موبایل */
+  }
+  
   .sidebar {
     width: 100%;
-    max-width: 420px; /* افزایش max-width از 360px به 420px */
+    max-width: 320px; /* کاهش max-width به 320px */
     top: 76px;
-    height: calc(100vh - 76px - 200px);
+    height: 100vh; /* full-height */
     transform: translateX(100%);
   }
   
