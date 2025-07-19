@@ -33,6 +33,8 @@ export interface MedicineFormData {
   instructions?: string
   quantity?: number; // Added quantity
   expiration_date?: string; // Added expiration_date
+  image_file?: File; // Added image file
+  image_url?: string; // Added image URL
 }
 
 export class MedicineService {
@@ -111,12 +113,38 @@ export class MedicineService {
   // Add a new medicine for a patient
   static async addMedicine(patientId: string, userId: string, medicineData: MedicineFormData): Promise<Medicine> {
     try {
+      let imageUrl = null;
+
+      // آپلود عکس اگر وجود داشته باشد
+      if (medicineData.image_file) {
+        const fileName = `medicines/${patientId}/${Date.now()}_${medicineData.image_file.name}`;
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('medicine-images')
+          .upload(fileName, medicineData.image_file, {
+            cacheControl: '3600',
+            upsert: false
+          });
+
+        if (uploadError) {
+          console.error('Error uploading image:', uploadError);
+          throw uploadError;
+        }
+
+        // دریافت URL عمومی عکس
+        const { data: urlData } = supabase.storage
+          .from('medicine-images')
+          .getPublicUrl(fileName);
+        
+        imageUrl = urlData.publicUrl;
+      }
+
       // Clean up the data - convert empty strings to null for date fields
       const cleanedData = {
         ...medicineData,
         expiration_date: medicineData.expiration_date && medicineData.expiration_date.trim() !== '' 
           ? medicineData.expiration_date 
-          : null
+          : null,
+        image_url: imageUrl || medicineData.image_url || null
       }
 
       const { data, error } = await supabase
