@@ -6,7 +6,7 @@ import { MedicineService, Medicine, MedicineFormData, MedicationType, DosageForm
 import MedicineCard from '@/components/medicines/MedicineCard'
 import AddMedicineModal from '@/components/medicines/AddMedicineModal'
 import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
+
 import Loading from '@/components/Loading'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
@@ -140,7 +140,7 @@ export default function MedicinesPage() {
           <Loading />
           <p className="mt-4 text-muted">در حال بررسی احراز هویت...</p>
         </div>
-        <Footer />
+
       </div>
     )
   }
@@ -259,7 +259,7 @@ export default function MedicinesPage() {
         onSubmit={handleAddMedicine}
       />
 
-      <Footer />
+
     </div>
   )
 }
