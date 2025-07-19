@@ -7,8 +7,6 @@ import { PatientService, Patient } from '@/lib/services/patientService';
 import VitalCard from '@/components/vitals/VitalCard';
 import AddVitalModal from '@/components/vitals/AddVitalModal';
 import VitalChart from '@/components/vitals/VitalChart';
-import AppWrapper from '@/components/AppWrapper';
-
 import Loading from '@/components/Loading';
 import Button from '@/components/ui/Button';
 import Select from '@/components/ui/Select';
@@ -72,7 +70,6 @@ export default function VitalsPage() {
 
   return (
     <div className="min-h-screen bg-light">
-      <Navbar />
       <div className="container mx-auto px-4 py-8">
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h1 className="h2 text-primary">Manage Vitals</h1>
@@ -83,10 +80,14 @@ export default function VitalsPage() {
         </div>
 
         <div className="mb-3">
-          <Select value={selectedPatient} onChange={(e) => setSelectedPatient(e.target.value)}>
-            <option value="">Select a Patient</option>
-            {patients.map(p => <option key={p.id} value={p.id}>{p.full_name}</option>)}
-          </Select>
+          <Select 
+            value={selectedPatient} 
+            onChange={(e) => setSelectedPatient(e.target.value)}
+            options={[
+              { value: '', label: 'انتخاب بیمار' },
+              ...patients.map(p => ({ value: p.id!, label: p.full_name || 'نامشخص' }))
+            ]}
+          />
         </div>
 
         {error && <div className="alert alert-danger">{error}</div>}
