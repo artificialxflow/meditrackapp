@@ -249,33 +249,7 @@ export class AuthService {
     }
   }
 
-  // ورود با گیت‌هاب
-  static async signInWithGithub(): Promise<AuthResponse> {
-    try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'github',
-        options: {
-          redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`
-        }
-      })
 
-      if (error) {
-        return {
-          success: false,
-          error: this.getErrorMessage(error)
-        }
-      }
-
-      return {
-        success: true
-      }
-    } catch (error) {
-      return {
-        success: false,
-        error: 'خطا در ورود با گیت‌هاب. لطفاً دوباره تلاش کنید.'
-      }
-    }
-  }
 
   // تبدیل خطاهای Supabase به پیام‌های فارسی
   private static getErrorMessage(error: AuthError): string {
