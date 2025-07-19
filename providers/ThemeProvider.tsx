@@ -14,14 +14,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      setTheme(savedTheme);
-      document.documentElement.setAttribute('data-bs-theme', savedTheme);
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    if (savedTheme && savedTheme === 'dark') {
       setTheme('dark');
       document.documentElement.setAttribute('data-bs-theme', 'dark');
     } else {
+      // همیشه پیش‌فرض لایت باشد
+      setTheme('light');
       document.documentElement.setAttribute('data-bs-theme', 'light');
+      localStorage.setItem('theme', 'light');
     }
   }, []);
 
