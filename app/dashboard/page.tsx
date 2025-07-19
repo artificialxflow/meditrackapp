@@ -7,7 +7,6 @@ import { MedicineService, Medicine } from '@/lib/services/medicineService';
 import { AppointmentService, Appointment } from '@/lib/services/appointmentService';
 import { VitalsService, Vital } from '@/lib/services/vitalsService';
 import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import Loading from '@/components/Loading';
 import { FaUser, FaPills, FaCalendarCheck, FaHeartbeat, FaChartLine, FaClock, FaExclamationTriangle } from 'react-icons/fa';
 
@@ -59,24 +58,20 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-vh-100 d-flex flex-column">
-        <Navbar />
-        <div className="flex-grow-1 d-flex align-items-center justify-content-center bg-light">
-          <div className="text-center">
-            <Loading />
-            <p className="mt-4 text-muted">در حال بارگذاری داشبورد...</p>
-          </div>
-        </div>
-        <Footer />
+          <div className="d-flex align-items-center justify-content-center bg-light" style={{ minHeight: '60vh' }}>
+      <div className="text-center">
+        <Loading />
+        <p className="mt-4 text-muted">در حال بارگذاری داشبورد...</p>
       </div>
+    </div>
     );
   }
 
   return (
-    <div className="min-vh-100 d-flex flex-column">
+    <div className="bg-light">
       <Navbar />
       
-      <main className="flex-grow-1 bg-light">
+      <main className="bg-light">
         <div className="container py-5">
           {/* Header Section */}
           <div className="row mb-5">
@@ -254,8 +249,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </main>
-      
-      <Footer />
     </div>
   );
 }
