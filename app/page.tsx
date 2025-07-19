@@ -199,7 +199,7 @@ export default function HomePage() {
             همین الان ثبت‌نام کنید و مدیریت داروها را به سطح بالاتری ببرید
           </p>
           <Link 
-            href="/register" 
+                            href="/auth/register" 
             className="btn btn-light btn-lg px-5 py-3 rounded-3 fw-semibold"
           >
             شروع رایگان
