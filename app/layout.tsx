@@ -2,7 +2,7 @@ import './globals.css'
 import { Vazirmatn } from 'next/font/google'
 import { AuthProvider } from '@/providers/AuthProvider'
 import { ThemeProvider } from '@/providers/ThemeProvider'
-import Layout from '@/components/Layout'
+import { SidebarProvider } from '@/providers/SidebarProvider'
 import Footer from '@/components/Footer'
 import Script from 'next/script'
 
@@ -27,10 +27,12 @@ export default function RootLayout({
       <body className={`${vazir.variable} font-vazir d-flex flex-column min-vh-100`}>
         <AuthProvider>
           <ThemeProvider>
-            <Layout>
-              {children}
-            </Layout>
-            <Footer />
+            <SidebarProvider>
+              <main className="flex-grow-1">
+                {children}
+              </main>
+              <Footer />
+            </SidebarProvider>
           </ThemeProvider>
         </AuthProvider>
         <Script 
