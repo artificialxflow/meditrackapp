@@ -17,8 +17,9 @@ export default function PatientsPage() {
   const { user } = useAuth();
   const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [showShareModal, setShowShareModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false)
+  const [showShareModal, setShowShareModal] = useState(false)
+  const [selectedPatient, setSelectedPatient] = useState<any>(null)
   const [editingPatient, setEditingPatient] = useState<Patient | null>(null);
   const [sharingPatientId, setSharingPatientId] = useState<string | null>(null);
   const [error, setError] = useState('');
@@ -188,10 +189,16 @@ export default function PatientsPage() {
             <div className="row g-4">
               {patients.map(patient => (
                 <div key={patient.id} className="col-lg-6 col-xl-4">
-                  <PatientCard patient={patient} onDelete={handleDeletePatient} onEdit={handleEdit} />
-                  <Button className="btn-sm btn-outline-info mt-2" onClick={() => handleShare(patient.id!)}>
-                    <FaShareAlt className="me-1" /> اشتراک‌گذاری
-                  </Button>
+                  <PatientCard 
+                  patient={patient} 
+                  onDelete={handleDeletePatient} 
+                  onEdit={handleEdit}
+                  onShare={(patient) => {
+                    setSelectedPatient(patient)
+                    setShowShareModal(true)
+                  }}
+                />
+
                 </div>
               ))}
             </div>
@@ -205,11 +212,15 @@ export default function PatientsPage() {
           initialData={editingPatient}
         />
 
-        {sharingPatientId && (
+        {selectedPatient && (
           <SharePatientModal
             show={showShareModal}
-            onHide={handleCloseShareModal}
-            onSubmit={handleSharePatient}
+            onHide={() => {
+              setShowShareModal(false)
+              setSelectedPatient(null)
+            }}
+            patientId={selectedPatient.id}
+            patientName={selectedPatient.full_name}
           />
         )}
       </div>
