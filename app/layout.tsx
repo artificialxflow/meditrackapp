@@ -28,9 +28,7 @@ export default function RootLayout({
         <AuthProvider>
           <ThemeProvider>
             <SidebarProvider>
-              <main className="flex-grow-1">
-                {children}
-              </main>
+              {children}
               <Footer />
             </SidebarProvider>
           </ThemeProvider>
