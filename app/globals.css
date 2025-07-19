@@ -24,6 +24,7 @@ body {
   overflow-x: hidden;
   font-family: var(--font-vazir);
   direction: rtl;
+  padding-top: 76px; /* برای navbar ثابت */
 }
 
 body {
@@ -39,6 +40,18 @@ a {
 /* Custom Bootstrap RTL Overrides */
 .container {
   max-width: 1200px;
+}
+
+/* Navbar Styles */
+.navbar {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 1050;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 76px;
 }
 
 /* RTL specific overrides */
@@ -535,13 +548,15 @@ a {
   display: flex;
   flex: 1;
   position: relative;
+  min-height: calc(100vh - 76px - 200px); /* ارتفاع navbar + footer */
 }
 
 .main-content {
   flex: 1;
   padding: 2rem;
   transition: margin-right 0.3s ease;
-  min-height: calc(100vh - 76px); /* ارتفاع navbar */
+  min-height: calc(100vh - 76px - 200px); /* ارتفاع navbar + footer */
+  background-color: #f8f9fa;
 }
 
 .main-content.with-sidebar {
@@ -554,16 +569,27 @@ a {
   padding: 0 !important;
 }
 
+/* بهبود responsive design */
+@media (max-width: 991.98px) {
+  .main-content.with-sidebar {
+    margin-right: 0;
+  }
+  
+  .main-content {
+    padding: 1rem;
+  }
+}
+
 /* Sidebar Styles */
 .sidebar {
   position: fixed;
-  top: 0;
+  top: 76px; /* ارتفاع navbar */
   right: 0;
   width: 280px;
-  height: 100vh;
+  height: calc(100vh - 76px - 200px); /* ارتفاع navbar + footer */
   background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
   color: white;
-  z-index: 1050;
+  z-index: 1040;
   transform: translateX(0);
   transition: transform 0.3s ease;
   display: flex;
@@ -575,6 +601,10 @@ a {
 @media (min-width: 992px) {
   .sidebar {
     transform: translateX(0) !important;
+  }
+  
+  .main-content.with-sidebar {
+    margin-right: 280px !important;
   }
 }
 
@@ -638,6 +668,8 @@ a {
   .sidebar {
     width: 100%;
     max-width: 320px;
+    top: 76px;
+    height: calc(100vh - 76px - 200px);
     transform: translateX(100%);
   }
   
@@ -849,9 +881,18 @@ a {
 }
 
 /* Custom modal styles */
+.modal {
+  z-index: 1060 !important;
+}
+
+.modal-backdrop {
+  z-index: 1055 !important;
+}
+
 .modal-content {
   border-radius: 1rem;
   border: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .modal-header {
