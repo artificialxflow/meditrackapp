@@ -4,15 +4,13 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { useTheme } from '@/providers/ThemeProvider'
+import { useSidebar } from '@/providers/SidebarProvider'
 import { FaSun, FaMoon, FaHome, FaQuestionCircle, FaBars } from 'react-icons/fa'
 
-interface NavbarProps {
-  onSidebarToggle: () => void;
-}
-
-export default function Navbar({ onSidebarToggle }: NavbarProps) {
+export default function Navbar() {
   const { user, logout } = useAuth()
   const { theme, toggleTheme } = useTheme()
+  const { toggleSidebar } = useSidebar()
   const pathname = usePathname()
   
   const isHomePage = pathname === '/';
@@ -24,7 +22,7 @@ export default function Navbar({ onSidebarToggle }: NavbarProps) {
           {user && !isHomePage && (
             <button
               className="btn btn-link text-white me-3 d-lg-none"
-              onClick={onSidebarToggle}
+              onClick={toggleSidebar}
             >
               <FaBars />
             </button>
