@@ -1,20 +1,38 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { useTheme } from '@/providers/ThemeProvider'
-import { FaSun, FaMoon, FaHome, FaUserInjured, FaUsers, FaPills, FaCalendarAlt, FaHeartbeat, FaFileAlt, FaBell, FaUser, FaQuestionCircle, FaTachometerAlt, FaClock } from 'react-icons/fa'
+import { FaSun, FaMoon, FaHome, FaQuestionCircle, FaBars } from 'react-icons/fa'
 
-export default function Navbar() {
+interface NavbarProps {
+  onSidebarToggle: () => void;
+}
+
+export default function Navbar({ onSidebarToggle }: NavbarProps) {
   const { user, logout } = useAuth()
   const { theme, toggleTheme } = useTheme()
+  const pathname = usePathname()
+  
+  const isHomePage = pathname === '/';
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
       <div className="container-fluid">
-        <Link href="/" className="navbar-brand fw-bold">
-          دارویار
-        </Link>
+        <div className="d-flex align-items-center">
+          {user && !isHomePage && (
+            <button
+              className="btn btn-link text-white me-3 d-lg-none"
+              onClick={onSidebarToggle}
+            >
+              <FaBars />
+            </button>
+          )}
+          <Link href="/" className="navbar-brand fw-bold">
+            دارویار
+          </Link>
+        </div>
         <button
           className="navbar-toggler"
           type="button"
@@ -43,90 +61,6 @@ export default function Navbar() {
                 راهنما
               </Link>
             </li>
-            
-            {user && (
-              <>
-                {/* داشبورد - مرکز کنترل */}
-                <li className="nav-item">
-                  <Link href="/dashboard" className="nav-link d-flex align-items-center">
-                    <FaTachometerAlt className="ms-2" />
-                    داشبورد
-                  </Link>
-                </li>
-                
-                {/* مدیریت بیماران */}
-                <li className="nav-item">
-                  <Link href="/patients" className="nav-link d-flex align-items-center">
-                    <FaUserInjured className="ms-2" />
-                    بیماران
-                  </Link>
-                </li>
-                
-                {/* مدیریت خانواده‌ها */}
-                <li className="nav-item">
-                  <Link href="/families" className="nav-link d-flex align-items-center">
-                    <FaUsers className="ms-2" />
-                    خانواده‌ها
-                  </Link>
-                </li>
-                
-                {/* مدیریت داروها */}
-                <li className="nav-item">
-                  <Link href="/medicines" className="nav-link d-flex align-items-center">
-                    <FaPills className="ms-2" />
-                    داروها
-                  </Link>
-                </li>
-                
-                {/* برنامه‌های مصرف دارو */}
-                <li className="nav-item">
-                  <Link href="/schedules" className="nav-link d-flex align-items-center">
-                    <FaClock className="ms-2" />
-                    برنامه‌ها
-                  </Link>
-                </li>
-                
-                {/* قرار ملاقات‌ها */}
-                <li className="nav-item">
-                  <Link href="/appointments" className="nav-link d-flex align-items-center">
-                    <FaCalendarAlt className="ms-2" />
-                    قرار ملاقات
-                  </Link>
-                </li>
-                
-                {/* علائم حیاتی */}
-                <li className="nav-item">
-                  <Link href="/vitals" className="nav-link d-flex align-items-center">
-                    <FaHeartbeat className="ms-2" />
-                    علائم حیاتی
-                  </Link>
-                </li>
-                
-                {/* اسناد پزشکی */}
-                <li className="nav-item">
-                  <Link href="/documents" className="nav-link d-flex align-items-center">
-                    <FaFileAlt className="ms-2" />
-                    اسناد
-                  </Link>
-                </li>
-                
-                {/* اعلان‌ها */}
-                <li className="nav-item">
-                  <Link href="/notifications" className="nav-link d-flex align-items-center">
-                    <FaBell className="ms-2" />
-                    اعلان‌ها
-                  </Link>
-                </li>
-                
-                {/* پروفایل کاربر */}
-                <li className="nav-item">
-                  <Link href="/profile" className="nav-link d-flex align-items-center">
-                    <FaUser className="ms-2" />
-                    پروفایل
-                  </Link>
-                </li>
-              </>
-            )}
           </ul>
           <ul className="navbar-nav">
             <li className="nav-item">
