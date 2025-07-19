@@ -3,7 +3,6 @@ import { Vazirmatn } from 'next/font/google'
 import { AuthProvider } from '@/providers/AuthProvider'
 import { ThemeProvider } from '@/providers/ThemeProvider'
 import { SidebarProvider } from '@/providers/SidebarProvider'
-import Footer from '@/components/Footer'
 import Script from 'next/script'
 
 const vazir = Vazirmatn({ 
@@ -30,7 +29,6 @@ export default function RootLayout({
             <SidebarProvider>
               <div className="d-flex flex-column min-vh-100">
                 {children}
-                <Footer />
               </div>
             </SidebarProvider>
           </ThemeProvider>
