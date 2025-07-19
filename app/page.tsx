@@ -4,8 +4,8 @@ import Navbar from '@/components/Navbar'
 
 export default function HomePage() {
   return (
-    <div className="min-vh-100 bg-gradient-to-br">
-      <Navbar />
+    <div className="min-vh-100 bg-gradient-to-br home-page">
+      <Navbar onSidebarToggle={() => {}} />
 
       {/* Hero Section */}
       <section className="py-5">
