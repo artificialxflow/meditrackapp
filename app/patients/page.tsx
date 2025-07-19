@@ -11,15 +11,15 @@ import SharePatientModal from '@/components/patients/SharePatientModal';
 import AppWrapper from '@/components/AppWrapper';
 import Loading from '@/components/Loading';
 import Button from '@/components/ui/Button';
-import { FaPlus, FaShareAlt } from 'react-icons/fa';
+import { FaPlus } from 'react-icons/fa';
 
 export default function PatientsPage() {
   const { user } = useAuth();
   const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showAddModal, setShowAddModal] = useState(false)
-  const [showShareModal, setShowShareModal] = useState(false)
-  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null)
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [editingPatient, setEditingPatient] = useState<Patient | null>(null);
   const [sharingPatientId, setSharingPatientId] = useState<string | null>(null);
   const [error, setError] = useState('');
@@ -190,15 +190,14 @@ export default function PatientsPage() {
               {patients.map(patient => (
                 <div key={patient.id} className="col-lg-6 col-xl-4">
                   <PatientCard 
-                  patient={patient} 
-                  onDelete={handleDeletePatient} 
-                  onEdit={handleEdit}
-                  onShare={(patient) => {
-                    setSelectedPatient(patient)
-                    setShowShareModal(true)
-                  }}
-                />
-
+                    patient={patient} 
+                    onDelete={handleDeletePatient} 
+                    onEdit={handleEdit}
+                    onShare={(patient) => {
+                      setSelectedPatient(patient);
+                      setShowShareModal(true);
+                    }}
+                  />
                 </div>
               ))}
             </div>
@@ -212,12 +211,12 @@ export default function PatientsPage() {
           initialData={editingPatient}
         />
 
-        {selectedPatient && (
+        {selectedPatient && selectedPatient.id && (
           <SharePatientModal
             show={showShareModal}
             onHide={() => {
-              setShowShareModal(false)
-              setSelectedPatient(null)
+              setShowShareModal(false);
+              setSelectedPatient(null);
             }}
             patientId={selectedPatient.id}
             patientName={selectedPatient.full_name}
