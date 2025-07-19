@@ -8,8 +8,7 @@ import { FamilyService } from '@/lib/services/familyService';
 import PatientCard from '@/components/patients/PatientCard';
 import AddPatientModal from '@/components/patients/AddPatientModal';
 import SharePatientModal from '@/components/patients/SharePatientModal';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import AppWrapper from '@/components/AppWrapper';
 import Loading from '@/components/Loading';
 import Button from '@/components/ui/Button';
 import { FaPlus, FaShareAlt } from 'react-icons/fa';
@@ -49,7 +48,6 @@ export default function PatientsPage() {
         await ProfileService.ensureProfile();
       } catch (profileError) {
         console.warn('Profile creation failed, trying to continue:', profileError);
-        // Continue anyway, the backend will handle it
       }
       
       // Clean the data before sending
@@ -159,63 +157,62 @@ export default function PatientsPage() {
   };
 
   return (
-    <div className="min-vh-100 bg-light">
-      <Navbar />
-      <div className="container py-5">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h1 className="h2 text-primary">مدیریت بیماران</h1>
-          <Button onClick={() => setShowAddModal(true)} className="btn-primary">
-            <FaPlus className="me-2" />
-            افزودن بیمار
-          </Button>
-        </div>
-
-        {error && <div className="alert alert-danger">خطا در بارگذاری بیماران.</div>}
-
-        {loading ? (
-          <div className="text-center py-5">
-            <Loading />
-            <p className="mt-3 text-muted">در حال بارگذاری بیماران...</p>
-          </div>
-        ) : patients.length === 0 ? (
-          <div className="text-center py-5">
-            <h3 className="h4 text-muted">هیچ بیماری یافت نشد.</h3>
-            <p className="text-muted">با افزودن یک بیمار جدید شروع کنید.</p>
-            <Button onClick={() => setShowAddModal(true)} className="btn-primary mt-3">
+    <AppWrapper>
+      <div className="min-vh-100 bg-light">
+        <div className="container py-5">
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <h1 className="h2 text-primary">مدیریت بیماران</h1>
+            <Button onClick={() => setShowAddModal(true)} className="btn-primary">
               <FaPlus className="me-2" />
-              افزودن اولین بیمار
+              افزودن بیمار
             </Button>
           </div>
-        ) : (
-          <div className="row g-4">
-            {patients.map(patient => (
-              <div key={patient.id} className="col-lg-6 col-xl-4">
-                <PatientCard patient={patient} onDelete={handleDeletePatient} onEdit={handleEdit} />
-                <Button className="btn-sm btn-outline-info mt-2" onClick={() => handleShare(patient.id!)}>
-                  <FaShareAlt className="me-1" /> اشتراک‌گذاری
-                </Button>
-              </div>
-            ))}
-          </div>
+
+          {error && <div className="alert alert-danger">خطا در بارگذاری بیماران.</div>}
+
+          {loading ? (
+            <div className="text-center py-5">
+              <Loading />
+              <p className="mt-3 text-muted">در حال بارگذاری بیماران...</p>
+            </div>
+          ) : patients.length === 0 ? (
+            <div className="text-center py-5">
+              <h3 className="h4 text-muted">هیچ بیماری یافت نشد.</h3>
+              <p className="text-muted">با افزودن یک بیمار جدید شروع کنید.</p>
+              <Button onClick={() => setShowAddModal(true)} className="btn-primary mt-3">
+                <FaPlus className="me-2" />
+                افزودن اولین بیمار
+              </Button>
+            </div>
+          ) : (
+            <div className="row g-4">
+              {patients.map(patient => (
+                <div key={patient.id} className="col-lg-6 col-xl-4">
+                  <PatientCard patient={patient} onDelete={handleDeletePatient} onEdit={handleEdit} />
+                  <Button className="btn-sm btn-outline-info mt-2" onClick={() => handleShare(patient.id!)}>
+                    <FaShareAlt className="me-1" /> اشتراک‌گذاری
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <AddPatientModal
+          show={showAddModal}
+          onHide={handleCloseAddModal}
+          onSubmit={editingPatient ? handleUpdatePatient : handleAddPatient}
+          initialData={editingPatient}
+        />
+
+        {sharingPatientId && (
+          <SharePatientModal
+            show={showShareModal}
+            onHide={handleCloseShareModal}
+            onSubmit={handleSharePatient}
+          />
         )}
       </div>
-
-      <AddPatientModal
-        show={showAddModal}
-        onHide={handleCloseAddModal}
-        onSubmit={editingPatient ? handleUpdatePatient : handleAddPatient}
-        initialData={editingPatient}
-      />
-
-      {sharingPatientId && (
-        <SharePatientModal
-          show={showShareModal}
-          onHide={handleCloseShareModal}
-          onSubmit={handleSharePatient}
-        />
-      )}
-
-      <Footer />
-    </div>
+    </AppWrapper>
   );
 }
