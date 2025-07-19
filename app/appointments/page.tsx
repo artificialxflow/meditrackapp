@@ -73,48 +73,53 @@ export default function AppointmentsPage() {
     <AppWrapper>
       <div className="min-h-screen bg-light">
         <div className="container mx-auto px-4 py-8">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h1 className="h2 text-primary">Manage Appointments</h1>
-          <Button onClick={() => setShowAddModal(true)} className="btn-primary" disabled={!selectedPatient}>
-            <FaPlus className="me-2" />
-            Add Appointment
-          </Button>
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <h1 className="h2 text-primary">مدیریت قرارها</h1>
+            <Button onClick={() => setShowAddModal(true)} className="btn-primary" disabled={!selectedPatient}>
+              <FaPlus className="me-2" />
+              افزودن قرار
+            </Button>
+          </div>
+
+          <div className="mb-3">
+            <Select 
+              value={selectedPatient} 
+              onChange={(e) => setSelectedPatient(e.target.value)}
+              options={[
+                { value: '', label: 'انتخاب بیمار' },
+                ...patients.map(p => ({ value: p.id!, label: p.full_name || 'نامشخص' }))
+              ]}
+            />
+          </div>
+
+          {error && <div className="alert alert-danger">{error}</div>}
+
+          {loading ? (
+            <Loading />
+          ) : appointments.length === 0 ? (
+            <div className="text-center py-5">
+              <h3 className="h4 text-muted">هیچ قراری یافت نشد.</h3>
+            </div>
+          ) : (
+            <div className="row g-4">
+              {appointments.map(appointment => (
+                <div key={appointment.id} className="col-lg-6 col-xl-4">
+                  <AppointmentCard appointment={appointment} />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        <div className="mb-3">
-          <Select value={selectedPatient} onChange={(e) => setSelectedPatient(e.target.value)}>
-            <option value="">Select a Patient</option>
-            {patients.map(p => <option key={p.id} value={p.id}>{p.full_name}</option>)}
-          </Select>
-        </div>
+        <AddAppointmentModal
+          show={showAddModal}
+          onHide={() => setShowAddModal(false)}
+          onSubmit={handleAddAppointment}
+          patientId={selectedPatient}
+        />
 
-        {error && <div className="alert alert-danger">{error}</div>}
-
-        {loading ? (
-          <Loading />
-        ) : appointments.length === 0 ? (
-          <div className="text-center py-5">
-            <h3 className="h4 text-muted">No appointments found.</h3>
-          </div>
-        ) : (
-          <div className="row g-4">
-            {appointments.map(appointment => (
-              <div key={appointment.id} className="col-lg-6 col-xl-4">
-                <AppointmentCard appointment={appointment} />
-              </div>
-            ))}
-          </div>
-        )}
+        <Footer />
       </div>
-
-      <AddAppointmentModal
-        show={showAddModal}
-        onHide={() => setShowAddModal(false)}
-        onSubmit={handleAddAppointment}
-        patientId={selectedPatient}
-      />
-
-      <Footer />
-    </div>
+    </AppWrapper>
   );
 }
