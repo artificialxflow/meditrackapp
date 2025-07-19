@@ -1,5 +1,5 @@
 import { Patient } from '@/lib/services/patientService';
-import { FaUser, FaBirthdayCake, FaVenusMars, FaTint } from 'react-icons/fa';
+import { FaUser, FaBirthdayCake, FaVenusMars, FaTint, FaShare } from 'react-icons/fa';
 import Button from '../ui/Button';
 import { Avatar } from '@/components/ui/Avatar';
 
@@ -7,9 +7,10 @@ interface PatientCardProps {
   patient: Patient;
   onDelete: (id: string) => void;
   onEdit: (patient: Patient) => void;
+  onShare: (patient: Patient) => void;
 }
 
-export default function PatientCard({ patient, onDelete, onEdit }: PatientCardProps) {
+export default function PatientCard({ patient, onDelete, onEdit, onShare }: PatientCardProps) {
   const getGenderText = (gender: string | null | undefined) => {
     switch (gender) {
       case 'male': return 'مرد';
@@ -52,6 +53,19 @@ export default function PatientCard({ patient, onDelete, onEdit }: PatientCardPr
       </div>
       <div className="card-footer bg-transparent border-top-0">
         <div className="d-flex justify-content-end">
+          <Button 
+            className="btn-success me-2" 
+            onClick={() => onShare(patient)}
+            style={{ 
+              backgroundColor: '#28a745', 
+              borderColor: '#28a745',
+              color: 'white',
+              fontWeight: '500'
+            }}
+          >
+            <FaShare className="ms-1" />
+            اشتراک
+          </Button>
           <Button className="btn-outline-secondary me-2" onClick={() => onEdit(patient)}>ویرایش</Button>
           <Button className="btn-outline-danger" onClick={() => onDelete(patient.id!)}>حذف</Button>
         </div>
