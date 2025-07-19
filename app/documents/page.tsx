@@ -106,16 +106,24 @@ export default function DocumentsPage() {
 
         <div className="row mb-3">
           <div className="col-md-4">
-            <Select value={selectedPatient} onChange={(e) => setSelectedPatient(e.target.value)}>
-              <option value="">Select a Patient</option>
-              {patients.map(p => <option key={p.id} value={p.id}>{p.full_name}</option>)}
-            </Select>
+            <Select 
+              value={selectedPatient} 
+              onChange={(e) => setSelectedPatient(e.target.value)}
+              options={[
+                { value: '', label: 'Select a Patient' },
+                ...patients.map(p => ({ value: p.id!, label: p.full_name }))
+              ]}
+            />
           </div>
           <div className="col-md-4">
-            <Select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
-              <option value="">All Categories</option>
-              {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
-            </Select>
+            <Select 
+              value={selectedCategory} 
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              options={[
+                { value: '', label: 'All Categories' },
+                ...categories.map(cat => ({ value: cat.id!, label: cat.name }))
+              ]}
+            />
           </div>
           <div className="col-md-4">
             <div className="input-group">
