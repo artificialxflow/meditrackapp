@@ -56,21 +56,24 @@ export default function MedicineCard({ medicine, onDelete, onEdit }: MedicineCar
       shadow="md"
       className="h-100"
     >
+      {/* عکس دارو */}
+      {medicine.image_url ? (
+        <img 
+          src={medicine.image_url} 
+          alt={`عکس ${medicine.name}`}
+          className="medicine-card-image"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.style.display = 'none';
+            target.nextElementSibling?.classList.remove('d-none');
+          }}
+        />
+      ) : null}
+      <div className={`medicine-image-placeholder ${medicine.image_url ? 'd-none' : ''}`}>
+        <FaPills className="me-2" />
+        عکس دارو موجود نیست
+      </div>
       <div className="mb-3">
-        {medicine.generic_name && (
-          <div className="d-flex align-items-center mb-2">
-            <FaPrescriptionBottle className="text-muted me-2" />
-            <span className="text-muted small">{medicine.generic_name}</span>
-          </div>
-        )}
-        
-        {medicine.manufacturer && (
-          <div className="d-flex align-items-center mb-2">
-            <FaIndustry className="text-muted me-2" />
-            <span className="text-muted small">{medicine.manufacturer}</span>
-          </div>
-        )}
-        
         <div className="d-flex align-items-center mb-2">
           <FaCalendarAlt className="text-muted me-2" />
           <span className="text-muted small">
@@ -78,10 +81,10 @@ export default function MedicineCard({ medicine, onDelete, onEdit }: MedicineCar
           </span>
         </div>
         
-        {medicine.description && (
+        {medicine.instructions && (
           <div className="d-flex align-items-start mb-2">
             <FaNotesMedical className="text-muted me-2 mt-1" />
-            <span className="text-muted small">{medicine.description}</span>
+            <span className="text-muted small">{medicine.instructions}</span>
           </div>
         )}
       </div>
@@ -125,20 +128,24 @@ export default function MedicineCard({ medicine, onDelete, onEdit }: MedicineCar
           <h6 className="fw-semibold mb-2">اطلاعات تکمیلی</h6>
           <div className="row g-2">
             <div className="col-6">
-              <small className="text-muted">فرم دارویی:</small>
+              <small className="text-muted">نوع دارو:</small>
+              <div className="fw-semibold">{medicine.medication_type}</div>
+            </div>
+            <div className="col-6">
+              <small className="text-muted">فرم دوز:</small>
               <div className="fw-semibold">{medicine.dosage_form}</div>
             </div>
             <div className="col-6">
               <small className="text-muted">مقدار:</small>
-              <div className="fw-semibold">{medicine.strength}</div>
+              <div className="fw-semibold">{medicine.strength || 'نامشخص'}</div>
             </div>
             <div className="col-6">
-              <small className="text-muted">نسخه‌ای:</small>
-              <div>
-                <span className={`badge bg-${medicine.prescription_required ? 'warning' : 'success'}`}>
-                  {medicine.prescription_required ? 'بله' : 'خیر'}
-                </span>
-              </div>
+              <small className="text-muted">واحد:</small>
+              <div className="fw-semibold">{medicine.strength_unit || 'نامشخص'}</div>
+            </div>
+            <div className="col-6">
+              <small className="text-muted">تعداد:</small>
+              <div className="fw-semibold">{medicine.quantity || 'نامشخص'}</div>
             </div>
             <div className="col-6">
               <small className="text-muted">وضعیت:</small>
@@ -156,24 +163,10 @@ export default function MedicineCard({ medicine, onDelete, onEdit }: MedicineCar
               </div>
             )}
             
-            {medicine.side_effects && (
+            {medicine.expiration_date && (
               <div className="col-12">
-                <small className="text-muted">عوارض جانبی:</small>
-                <div className="small text-warning">{medicine.side_effects}</div>
-              </div>
-            )}
-            
-            {medicine.interactions && (
-              <div className="col-12">
-                <small className="text-muted">تداخلات دارویی:</small>
-                <div className="small text-danger">{medicine.interactions}</div>
-              </div>
-            )}
-            
-            {medicine.storage_conditions && (
-              <div className="col-12">
-                <small className="text-muted">شرایط نگهداری:</small>
-                <div className="small text-info">{medicine.storage_conditions}</div>
+                <small className="text-muted">تاریخ انقضا:</small>
+                <div className="small text-warning">{formatDate(medicine.expiration_date)}</div>
               </div>
             )}
           </div>
