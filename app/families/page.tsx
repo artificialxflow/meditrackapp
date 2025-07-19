@@ -152,7 +152,6 @@ export default function FamiliesPage() {
                 <div className="card mb-4">
                   <div className="card-header d-flex justify-content-between align-items-center">
                     <span>Family: {selectedFamily.name}</span>
-                    <span>Code: {selectedFamily.family_code}</span>
                   </div>
                   <div className="card-body">
                     <h5 className="card-title mb-3">Family Members</h5>
