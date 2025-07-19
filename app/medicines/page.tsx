@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { MedicineService, Medicine, MedicineFormData, MedicationType, DosageForm } from '@/lib/services/medicineService'
 import MedicineCard from '@/components/medicines/MedicineCard'
 import AddMedicineModal from '@/components/medicines/AddMedicineModal'
-import Navbar from '@/components/Navbar'
+import AppWrapper from '@/components/AppWrapper'
 
 import Loading from '@/components/Loading'
 import Button from '@/components/ui/Button'
@@ -135,19 +135,17 @@ export default function MedicinesPage() {
   if (!user) {
     return (
       <div className="min-h-screen bg-light">
-        <Navbar />
         <div className="container mx-auto px-4 py-8 text-center">
           <Loading />
           <p className="mt-4 text-muted">در حال بررسی احراز هویت...</p>
         </div>
-
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-light">
-      <Navbar />
+    <AppWrapper>
+      <div className="min-h-screen bg-light">
       
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
@@ -258,8 +256,7 @@ export default function MedicinesPage() {
         onHide={() => setShowAddModal(false)}
         onSubmit={handleAddMedicine}
       />
-
-
-    </div>
+      </div>
+    </AppWrapper>
   )
 }
