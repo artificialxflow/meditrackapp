@@ -3,6 +3,7 @@ import { MedicineFormData, MedicationType, DosageForm } from '@/lib/services/med
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 import Select from '../ui/Select';
+import MedicineImageUpload from './MedicineImageUpload';
 
 interface AddMedicineModalProps {
   show: boolean;
@@ -22,6 +23,8 @@ export default function AddMedicineModal({ show, onHide, onSubmit, initialData }
     quantity: undefined,
     expiration_date: '',
   });
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (initialData) {
@@ -48,9 +51,19 @@ export default function AddMedicineModal({ show, onHide, onSubmit, initialData }
     }));
   };
 
+  const handleImageChange = (file: File | null, url: string | null) => {
+    setSelectedImage(file);
+    setImageUrl(url);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    const submitData = {
+      ...formData,
+      image_file: selectedImage || undefined,
+      image_url: imageUrl || undefined
+    };
+    onSubmit(submitData);
   };
 
   if (!show) return null;
@@ -69,6 +82,13 @@ export default function AddMedicineModal({ show, onHide, onSubmit, initialData }
                 <label htmlFor="name" className="form-label">نام دارو</label>
                 <Input id="name" name="name" value={formData.name} onChange={handleChange} required className="form-control" placeholder="نام دارو را وارد کنید" />
               </div>
+              
+              {/* آپلود عکس دارو */}
+              <MedicineImageUpload
+                currentImageUrl={imageUrl}
+                onImageChange={handleImageChange}
+                medicineName={formData.name}
+              />
               <div className="mb-3">
                 <label htmlFor="medication_type" className="form-label">نوع دارو</label>
                 <Select 
