@@ -1,11 +1,13 @@
 import Link from 'next/link'
 import { FaPills, FaUsers, FaCalendarAlt, FaChartLine, FaShieldAlt, FaMobileAlt } from 'react-icons/fa'
+import AppWrapper from '@/components/AppWrapper'
 import Navbar from '@/components/Navbar'
 
 export default function HomePage() {
   return (
-    <div className="min-vh-100 bg-gradient-to-br home-page">
-      <Navbar onSidebarToggle={() => {}} />
+    <AppWrapper>
+      <div className="min-vh-100 bg-gradient-to-br home-page">
+        <Navbar />
 
       {/* Hero Section */}
       <section className="py-5">
@@ -205,6 +207,7 @@ export default function HomePage() {
         </div>
       </section>
 
-    </div>
+      </div>
+    </AppWrapper>
   )
 }
