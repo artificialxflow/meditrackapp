@@ -7,7 +7,7 @@ import { PatientService, Patient } from '@/lib/services/patientService';
 import ScheduleCard from '@/components/schedules/ScheduleCard';
 import AddScheduleModal from '@/components/schedules/AddScheduleModal';
 import LogIntakeModal from '@/components/schedules/LogIntakeModal';
-import Navbar from '@/components/Navbar';
+import AppWrapper from '@/components/AppWrapper';
 
 import Loading from '@/components/Loading';
 import Button from '@/components/ui/Button';
@@ -134,9 +134,9 @@ export default function SchedulesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-light">
-      <Navbar />
-      <div className="container mx-auto px-4 py-8">
+    <AppWrapper>
+      <div className="min-h-screen bg-light">
+        <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <div>
@@ -302,8 +302,7 @@ export default function SchedulesPage() {
           scheduledTime={new Date().toISOString()} // Use current time for logging
         />
       )}
-
-
-    </div>
+      </div>
+    </AppWrapper>
   );
 }
