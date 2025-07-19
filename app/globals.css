@@ -560,7 +560,7 @@ a {
 }
 
 .main-content.with-sidebar {
-  margin-right: 280px;
+  margin-right: 320px; /* افزایش margin از 280px به 320px */
 }
 
 /* صفحه اصلی بدون سایدبار */
@@ -580,12 +580,19 @@ a {
   }
 }
 
+/* Footer Styles */
+footer {
+  margin-top: auto;
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+}
+
 /* Sidebar Styles */
 .sidebar {
   position: fixed;
   top: 76px; /* ارتفاع navbar */
   right: 0;
-  width: 280px;
+  width: 320px; /* افزایش عرض از 280px به 320px */
   height: calc(100vh - 76px - 200px); /* ارتفاع navbar + footer */
   background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
   color: white;
@@ -595,6 +602,7 @@ a {
   display: flex;
   flex-direction: column;
   box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+  overflow-y: auto;
 }
 
 /* Desktop: همیشه باز */
@@ -604,7 +612,7 @@ a {
   }
   
   .main-content.with-sidebar {
-    margin-right: 280px !important;
+    margin-right: 320px !important; /* افزایش margin از 280px به 320px */
   }
 }
 
@@ -613,7 +621,7 @@ a {
 }
 
 .sidebar-header {
-  padding: 1.5rem;
+  padding: 2rem; /* افزایش padding از 1.5rem به 2rem */
   border-bottom: 1px solid rgba(255,255,255,0.1);
   background: rgba(0,0,0,0.1);
 }
@@ -632,11 +640,12 @@ a {
 
 .sidebar-nav-item {
   display: block;
-  padding: 0.75rem 1.5rem;
+  padding: 1rem 2rem; /* افزایش padding از 0.75rem 1.5rem به 1rem 2rem */
   color: rgba(255,255,255,0.8);
   text-decoration: none;
   transition: all 0.3s ease;
   border-right: 3px solid transparent;
+  font-size: 1.1rem; /* افزایش اندازه فونت */
 }
 
 .sidebar-nav-item:hover {
@@ -654,7 +663,7 @@ a {
 }
 
 .sidebar-footer {
-  padding: 1rem 1.5rem;
+  padding: 1.5rem 2rem; /* افزایش padding از 1rem 1.5rem به 1.5rem 2rem */
   border-top: 1px solid rgba(255,255,255,0.1);
   background: rgba(0,0,0,0.1);
 }
@@ -667,7 +676,7 @@ a {
   
   .sidebar {
     width: 100%;
-    max-width: 320px;
+    max-width: 360px; /* افزایش max-width از 320px به 360px */
     top: 76px;
     height: calc(100vh - 76px - 200px);
     transform: translateX(100%);
