@@ -8,6 +8,7 @@ import { AppointmentService, Appointment } from '@/lib/services/appointmentServi
 import { VitalsService, Vital } from '@/lib/services/vitalsService';
 import AppWrapper from '@/components/AppWrapper';
 import Loading from '@/components/Loading';
+import Link from 'next/link';
 import { FaUser, FaPills, FaCalendarCheck, FaHeartbeat, FaChartLine, FaClock, FaExclamationTriangle } from 'react-icons/fa';
 
 export default function DashboardPage() {
@@ -225,22 +226,22 @@ export default function DashboardPage() {
                 </div>
                 <div className="card-body">
                   <div className="d-grid gap-2">
-                    <a href="/patients" className="btn btn-outline-primary">
+                    <Link href="/patients" className="btn btn-outline-primary">
                       <FaUser className="me-2" />
                       مدیریت بیماران
-                    </a>
-                    <a href="/medicines" className="btn btn-outline-success">
+                    </Link>
+                    <Link href="/medicines" className="btn btn-outline-success">
                       <FaPills className="me-2" />
                       مدیریت داروها
-                    </a>
-                    <a href="/appointments" className="btn btn-outline-info">
+                    </Link>
+                    <Link href="/appointments" className="btn btn-outline-info">
                       <FaCalendarCheck className="me-2" />
                       قرار ملاقات‌ها
-                    </a>
-                    <a href="/vitals" className="btn btn-outline-danger">
+                    </Link>
+                    <Link href="/vitals" className="btn btn-outline-danger">
                       <FaHeartbeat className="me-2" />
                       علائم حیاتی
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
