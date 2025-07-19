@@ -19,7 +19,7 @@ export default function PatientsPage() {
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false)
   const [showShareModal, setShowShareModal] = useState(false)
-  const [selectedPatient, setSelectedPatient] = useState<any>(null)
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null)
   const [editingPatient, setEditingPatient] = useState<Patient | null>(null);
   const [sharingPatientId, setSharingPatientId] = useState<string | null>(null);
   const [error, setError] = useState('');
