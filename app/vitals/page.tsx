@@ -7,7 +7,7 @@ import { PatientService, Patient } from '@/lib/services/patientService';
 import VitalCard from '@/components/vitals/VitalCard';
 import AddVitalModal from '@/components/vitals/AddVitalModal';
 import VitalChart from '@/components/vitals/VitalChart';
-import Navbar from '@/components/Navbar';
+import AppWrapper from '@/components/AppWrapper';
 
 import Loading from '@/components/Loading';
 import Button from '@/components/ui/Button';
