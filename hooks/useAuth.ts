@@ -168,17 +168,7 @@ export const useAuth = () => {
     return result
   }, [updateAuthState])
 
-  const signInWithGithub = useCallback(async (): Promise<AuthResponse> => {
-    updateAuthState({ loading: true, error: null })
-    
-    const result = await AuthService.signInWithGithub()
-    
-    if (!result.success) {
-      updateAuthState({ loading: false, error: result.error || null })
-    }
-    
-    return result
-  }, [updateAuthState])
+
 
   const clearError = useCallback(() => {
     updateAuthState({ error: null })
@@ -193,7 +183,6 @@ export const useAuth = () => {
     forgotPassword,
     resetPassword,
     signInWithGoogle,
-    signInWithGithub,
     clearError
   }), [
     authState,
@@ -203,7 +192,6 @@ export const useAuth = () => {
     forgotPassword,
     resetPassword,
     signInWithGoogle,
-    signInWithGithub,
     clearError
   ])
 
