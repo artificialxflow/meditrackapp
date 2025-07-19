@@ -8,7 +8,7 @@ import VitalCard from '@/components/vitals/VitalCard';
 import AddVitalModal from '@/components/vitals/AddVitalModal';
 import VitalChart from '@/components/vitals/VitalChart';
 import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+
 import Loading from '@/components/Loading';
 import Button from '@/components/ui/Button';
 import Select from '@/components/ui/Select';
@@ -125,7 +125,7 @@ export default function VitalsPage() {
         patientId={selectedPatient}
       />
 
-      <Footer />
+      
     </div>
   );
 }
