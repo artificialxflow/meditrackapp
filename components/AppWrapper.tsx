@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useSidebar } from '@/providers/SidebarProvider';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
+import Footer from './Footer';
 
 interface AppWrapperProps {
   children: React.ReactNode;
@@ -39,6 +40,8 @@ export default function AppWrapper({ children }: AppWrapperProps) {
           {children}
         </main>
       </div>
+      
+      <Footer />
     </div>
   );
 } 
