@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { useTheme } from '@/providers/ThemeProvider'
 import { useSidebar } from '@/providers/SidebarProvider'
-import { FaSun, FaMoon, FaHome, FaQuestionCircle, FaBars } from 'react-icons/fa'
+import { FaSun, FaMoon, FaHome, FaQuestionCircle, FaBars, FaTachometerAlt } from 'react-icons/fa'
 
 export default function Navbar() {
   const { user, logout } = useAuth()
@@ -51,6 +51,16 @@ export default function Navbar() {
                 خانه
               </Link>
             </li>
+            
+            {/* داشبورد - برای کاربران لاگین شده */}
+            {user && (
+              <li className="nav-item">
+                <Link href="/dashboard" className="nav-link d-flex align-items-center">
+                  <FaTachometerAlt className="ms-2" />
+                  داشبورد
+                </Link>
+              </li>
+            )}
             
             {/* راهنما - همیشه قابل دسترس */}
             <li className="nav-item">
