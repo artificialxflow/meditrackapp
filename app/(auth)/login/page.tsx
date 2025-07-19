@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { FaPills, FaEye, FaEyeSlash, FaGoogle, FaGithub } from 'react-icons/fa'
+import { FaPills, FaEye, FaEyeSlash, FaGoogle } from 'react-icons/fa'
 import { useAuth } from '@/hooks/useAuth'
 import { TEST_CREDENTIALS } from '@/lib/auth/test-user'
 
@@ -15,7 +15,7 @@ export default function LoginPage() {
     rememberMe: false
   })
   
-  const { login, signInWithGoogle, signInWithGithub, loading, error, clearError } = useAuth()
+  const { login, signInWithGoogle, loading, error, clearError } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
@@ -76,12 +76,7 @@ export default function LoginPage() {
     }
   }
 
-  const handleGithubLogin = async () => {
-    const result = await signInWithGithub()
-    if (result.success) {
-      router.push('/dashboard')
-    }
-  }
+
 
   const handleTestLogin = () => {
     setFormData({
@@ -216,15 +211,6 @@ export default function LoginPage() {
             >
               <FaGoogle className="text-danger me-2" />
               <span>ورود با گوگل</span>
-            </button>
-            <button
-              type="button"
-              onClick={handleGithubLogin}
-              disabled={loading}
-              className="btn btn-outline-secondary d-flex align-items-center justify-content-center"
-            >
-              <FaGithub className="text-dark me-2" />
-              <span>ورود با گیت‌هاب</span>
             </button>
           </div>
 
