@@ -10,15 +10,15 @@ import { DocumentService, Document } from '@/lib/services/documentService';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Loading from '@/components/Loading';
-import { FaUser, FaPills, FaCalendarCheck, FaHeartbeat, FaFileAlt } from 'react-icons/fa';
+import { FaPills, FaCalendarCheck, FaHeartbeat, FaFileAlt } from 'react-icons/fa';
 
 interface PatientDetailPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default function PatientDetailPage({ params }: PatientDetailPageProps) {
   const { user } = useAuth();
-  const patientId = params.id;
+  const [patientId, setPatientId] = useState<string>('');
   const [patient, setPatient] = useState<Patient | null>(null);
   const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -27,6 +27,15 @@ export default function PatientDetailPage({ params }: PatientDetailPageProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  // Extract patientId from params Promise
+  useEffect(() => {
+    const extractParams = async () => {
+      const resolvedParams = await params;
+      setPatientId(resolvedParams.id);
+    };
+    extractParams();
+  }, [params]);
+
   const fetchData = useCallback(async () => {
     if (!user?.id || !patientId) return;
     try {
@@ -34,7 +43,7 @@ export default function PatientDetailPage({ params }: PatientDetailPageProps) {
       setError('');
 
       // Fetch patient details
-      const fetchedPatient = await PatientService.getPatientById(patientId); // Assuming getPatientById exists
+      const fetchedPatient = await PatientService.getPatientById(patientId);
       setPatient(fetchedPatient);
 
       // Fetch related data
@@ -59,8 +68,10 @@ export default function PatientDetailPage({ params }: PatientDetailPageProps) {
   }, [user?.id, patientId]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (patientId) {
+      fetchData();
+    }
+  }, [fetchData, patientId]);
 
   if (loading) {
     return (
