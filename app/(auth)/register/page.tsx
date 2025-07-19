@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { FaPills, FaEye, FaEyeSlash, FaGoogle, FaGithub, FaUser, FaEnvelope, FaPhone } from 'react-icons/fa'
+import { FaPills, FaEye, FaEyeSlash, FaGoogle, FaUser, FaEnvelope, FaPhone } from 'react-icons/fa'
 import { useAuth } from '@/hooks/useAuth'
 
 export default function RegisterPage() {
@@ -19,7 +19,7 @@ export default function RegisterPage() {
     agreeToTerms: false
   })
 
-  const { register, signInWithGoogle, signInWithGithub, loading, error, clearError } = useAuth()
+  const { register, signInWithGoogle, loading, error, clearError } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
@@ -61,12 +61,7 @@ export default function RegisterPage() {
     }
   }
 
-  const handleGithubLogin = async () => {
-    const result = await signInWithGithub()
-    if (result.success) {
-      router.push('/dashboard')
-    }
-  }
+
 
   return (
     <div className="min-vh-100 bg-gradient-to-br d-flex align-items-center justify-content-center p-4">
@@ -292,15 +287,6 @@ export default function RegisterPage() {
             >
               <FaGoogle className="text-danger me-2" />
               <span>ثبت‌نام با گوگل</span>
-            </button>
-            <button
-              type="button"
-              onClick={handleGithubLogin}
-              disabled={loading}
-              className="btn btn-outline-secondary d-flex align-items-center justify-content-center"
-            >
-              <FaGithub className="text-dark me-2" />
-              <span>ثبت‌نام با گیت‌هاب</span>
             </button>
           </div>
 
