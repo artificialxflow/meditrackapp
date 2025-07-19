@@ -48,10 +48,10 @@ export default function ForgotPasswordPage() {
             </p>
             <div className="space-y-3">
               <Link
-                href="/login"
+                href="/auth/login"
                 className="w-full bg-gradient-to-r from-blue-500 to-green-500 text-white py-3 px-6 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 inline-block"
               >
-                بازگشت به صفحه ورود
+                بازگشت به ورود
               </Link>
               <button
                 onClick={() => setIsSubmitted(false)}
@@ -140,7 +140,7 @@ export default function ForgotPasswordPage() {
             <p className="text-gray-600">
               رمز عبور خود را به یاد دارید؟{' '}
               <Link
-                href="/login"
+                href="/auth/login"
                 className="text-blue-500 hover:text-blue-600 font-semibold transition-colors"
               >
                 وارد شوید
