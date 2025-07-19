@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { FaPills, FaEye, FaEyeSlash, FaGoogle } from 'react-icons/fa'
 import { useAuth } from '@/hooks/useAuth'
-import { TEST_CREDENTIALS } from '@/lib/auth/test-user'
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -78,13 +77,7 @@ export default function LoginPage() {
 
 
 
-  const handleTestLogin = () => {
-    setFormData({
-      email: TEST_CREDENTIALS.email,
-      password: TEST_CREDENTIALS.password,
-      rememberMe: false
-    })
-  }
+
 
   return (
     <div className="min-vh-100 bg-gradient-to-br d-flex align-items-center justify-content-center p-4">
@@ -175,23 +168,31 @@ export default function LoginPage() {
               </Link>
             </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn btn-primary w-100 py-2 mb-3"
-            >
-              {loading ? (
-                <div className="d-flex align-items-center justify-content-center">
-                  <div className="spinner-border spinner-border-sm me-2" role="status">
-                    <span className="visually-hidden">در حال بارگذاری...</span>
+            {/* Submit Buttons */}
+            <div className="d-grid gap-2 mb-3">
+              <button
+                type="submit"
+                disabled={loading}
+                className="btn btn-primary py-2"
+              >
+                {loading ? (
+                  <div className="d-flex align-items-center justify-content-center">
+                    <div className="spinner-border spinner-border-sm me-2" role="status">
+                      <span className="visually-hidden">در حال بارگذاری...</span>
+                    </div>
+                    در حال ورود...
                   </div>
-                  در حال ورود...
-                </div>
-              ) : (
-                'ورود'
-              )}
-            </button>
+                ) : (
+                  'ورود'
+                )}
+              </button>
+              <Link
+                href="/register"
+                className="btn btn-outline-primary py-2 text-decoration-none"
+              >
+                ثبت‌نام
+              </Link>
+            </div>
           </form>
 
           {/* Divider */}
@@ -214,31 +215,9 @@ export default function LoginPage() {
             </button>
           </div>
 
-          {/* Sign Up Link */}
-          <div className="text-center mt-4">
-            <p className="text-muted">
-              حساب کاربری ندارید؟{' '}
-              <Link
-                href="/register"
-                className="text-decoration-none fw-semibold"
-              >
-                ثبت‌نام کنید
-              </Link>
-            </p>
-          </div>
 
-          {/* Test Login Button (Development Only) */}
-          {process.env.NODE_ENV === 'development' && (
-            <div className="text-center mt-3">
-              <button
-                type="button"
-                onClick={handleTestLogin}
-                className="btn btn-link btn-sm text-muted text-decoration-none"
-              >
-                پر کردن اطلاعات تست
-              </button>
-            </div>
-          )}
+
+
         </div>
 
         {/* Back to Home */}
