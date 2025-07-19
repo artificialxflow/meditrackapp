@@ -270,7 +270,7 @@ export default function RegisterPage() {
                 )}
               </button>
               <Link
-                href="/login"
+                href="/auth/login"
                 className="btn btn-outline-primary py-2 text-decoration-none"
               >
                 ورود
