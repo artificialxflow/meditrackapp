@@ -23,7 +23,7 @@ export default function HomePage() {
             </p>
             <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center">
               <Link 
-                href="/register" 
+                href="/auth/register" 
                 className="btn btn-primary btn-lg px-5 py-3 rounded-3 fw-semibold"
               >
                 شروع رایگان
