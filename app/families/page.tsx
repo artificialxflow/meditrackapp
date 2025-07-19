@@ -170,12 +170,13 @@ export default function FamiliesPage() {
                               value={member.role}
                               onChange={(e) => handleRoleChange(member.id!, e.target.value as 'owner' | 'admin' | 'caregiver' | 'viewer')}
                               className="form-select w-auto"
-                            >
-                              <option value="owner">Owner</option>
-                              <option value="admin">Admin</option>
-                              <option value="caregiver">Caregiver</option>
-                              <option value="viewer">Viewer</option>
-                            </Select>
+                              options={[
+                                { value: 'owner', label: 'Owner' },
+                                { value: 'admin', label: 'Admin' },
+                                { value: 'caregiver', label: 'Caregiver' },
+                                { value: 'viewer', label: 'Viewer' }
+                              ]}
+                            />
                           </li>
                         ))}
                       </ul>
