@@ -85,4 +85,19 @@ export class ProfileService {
       throw error
     }
   }
+
+  // Upload avatar for a user and return the public URL
+  static async uploadAvatar(userId: string, file: File): Promise<string> {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${userId}_${Date.now()}.${fileExt}`;
+    const { data, error } = await supabase.storage
+      .from('avatars')
+      .upload(fileName, file, {
+        cacheControl: '3600',
+        upsert: true,
+      });
+    if (error) throw error;
+    const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(fileName);
+    return urlData?.publicUrl || '';
+  }
 }
