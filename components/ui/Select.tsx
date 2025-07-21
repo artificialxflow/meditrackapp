@@ -15,7 +15,7 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   helperText?: string
   fullWidth?: boolean
   variant?: 'default' | 'success' | 'error' | 'warning'
-  options: SelectOption[]
+  options?: SelectOption[]
   placeholder?: string
 }
 
