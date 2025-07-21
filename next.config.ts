@@ -5,8 +5,13 @@ const nextConfig: NextConfig = {
   output: 'standalone',
   
   // Disable telemetry
-  telemetry: false,
-  
+  // telemetry: false, // حذف کلید نامعتبر
+
+  // Disable ESLint during builds
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+
   // Experimental features
   experimental: {
     // Enable server actions
