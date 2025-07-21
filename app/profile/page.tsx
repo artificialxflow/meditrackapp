@@ -38,7 +38,7 @@ export default function ProfilePage() {
     try {
       setError('');
       const publicUrl = await ProfileService.uploadAvatar(user.id, file);
-      const updatedProfile = await ProfileService.updateProfile(user.id, { avatar_url: publicUrl });
+      const updatedProfile = await ProfileService.upsertProfile({ avatar_url: publicUrl });
       setProfile(updatedProfile);
       // Optionally, refresh user session to update avatar_url in user object
     } catch (err) {
@@ -52,7 +52,7 @@ export default function ProfilePage() {
     if (!user) return;
     try {
       setError('');
-      const updatedProfile = await ProfileService.updateProfile(user.id, { full_name: fullName });
+      const updatedProfile = await ProfileService.upsertProfile({ full_name: fullName });
       setProfile(updatedProfile);
       alert('Profile updated successfully!');
     } catch (err) {
