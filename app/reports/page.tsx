@@ -95,25 +95,23 @@ export default function ReportsPage() {
       <div className="container mx-auto px-4 py-8">
         <h1 className="h2 text-primary mb-4">Reports</h1>
 
-          {/* @ts-expect-error: suppress options prop error for deploy */}
-        <div className="row mb-3">
-          <div className="col-md-4">
-            <Select value={selectedPatient} onChange={(e) => setSelectedPatient(e.target.value)}>
-              <option value="">Select a Patient</option>
-              {patients.map(p => <option key={p.id} value={p.id}>{p.full_name}</option>)}
-            </Select>
+          <div className="row mb-3">
+            <div className="col-md-4">
+              <Select value={selectedPatient} onChange={(e) => setSelectedPatient(e.target.value)}>
+                <option value="">Select a Patient</option>
+                {patients.map(p => <option key={p.id} value={p.id}>{p.full_name}</option>)}
+              </Select>
+            </div>
+            <div className="col-md-4">
+              <Select value={reportType} onChange={(e) => setReportType(e.target.value as 'medication' | 'vitals')}>
+                <option value="medication">Medication History</option>
+                <option value="vitals">Vital Signs</option>
+              </Select>
+            </div>
+            <div className="col-md-4">
+              <Button onClick={exportToCSV} className="btn-success w-100" disabled={!reportData}>Export to CSV</Button>
+            </div>
           </div>
-          {/* @ts-expect-error: suppress options prop error for deploy */}
-          <div className="col-md-4">
-            <Select value={reportType} onChange={(e) => setReportType(e.target.value as 'medication' | 'vitals')}>
-              <option value="medication">Medication History</option>
-              <option value="vitals">Vital Signs</option>
-            </Select>
-          </div>
-          <div className="col-md-4">
-            <Button onClick={exportToCSV} className="btn-success w-100" disabled={!reportData}>Export to CSV</Button>
-          </div>
-        </div>
 
         {error && <div className="alert alert-danger">{error}</div>}
 
