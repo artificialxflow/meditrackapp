@@ -26,6 +26,7 @@ export default function ProfilePage() {
         id: user.id,
         full_name: user.user_metadata.full_name || '',
         avatar_url: user.user_metadata.avatar_url || '',
+        email: user.email || '', // اضافه کردن ایمیل برای رفع خطا
       });
       setFullName(user.user_metadata.full_name || '');
       setLoading(false);
